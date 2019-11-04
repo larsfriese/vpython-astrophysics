@@ -1,6 +1,6 @@
 # vpython-astrophysics
 
-Simulations made with the python package vpython, specifically in the field of astrophysics.
+Simulations made with the python package vpython, specifically in the field of astrophysics.<br>
 Already working versions can be found on my website.
 - [Planetary simulator](https://bloglink.eu/sim/universe)
 - [Sun simulator](https://bloglink.eu/sim/sun)
