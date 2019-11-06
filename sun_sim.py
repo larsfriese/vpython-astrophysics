@@ -65,6 +65,7 @@ def P(r):
 #Temp change on free fall
 temp_change = ((((3/10))*(G*((new_sun_mass**2)/new_sun_radius)))/((new_sun_mass)*average_heat_capacity_core))
 
+
 star = sphere( pos=vector(0,0,0), radius = sun_radius, color=color.yellow, mass = sun_mass, momentum=vector(0,0,0), make_trail=False, lightforce = sun_lightforce, name="sun", opacity=0.5 )
 star_helium_burning = sphere( pos=vector(0,0,0), radius = sun_radius*0.2, color=color.orange, name="sun_help_obj", visible=False )
 
