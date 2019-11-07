@@ -32,7 +32,7 @@ kepler11_star = [[0.95,1.10*sr,0,14,"kepler11","kepler-11",14,1.045]]
 trappist1 = [[0.97,6371,82854,0.0115,"a","trappist1"],[1.16,6371,71029,0.0158,"b","trappist1"],[0.3,6371,59902,0.0223,"c","trappist1"],[0.7,6371,45478,0.0293,"d","trappist1"],[0.93,6371,(2*3.14159265359*(0.0385*au))/(86400*9.21),0.0385,"e","trappist1"],[1.51,6371,(2*3.14*(0.0469*au))/(86400*12.35),0.0469,"f","trappist1"],[0.33,6371,(2*3.141592653594*(0.0619*au))/(86400*18.77),0.0619,"g","trappist1"]]
 solar_system_planets = [[0.055,2439.7,47360,0.387099273,"merkur","solar_system"],[0.815,6051.8,35020,0.723,"venus","solar_system"],[1.0,6371,29722,1.0,"erde","solar_system"],[0.107,3389.5,24130,1.524,"mars","solar_system"]]
 solar_system_sattelites = [[0.01230,6371/4,29722,1.00257,"erde_mond1","solar_system"]]
-kepler11 = [[4.3,1.97*er,(2*3.141592653594*(0.091*au))/(86400*10.30),0.091,"b","kepler11"],[13.5,3.15*er,(2*3.141592653594*(0.106*au))/(86400*13.02),0.106,"c","kepler11"],[13.5,3.15*er,(2*3.141592653594*(0.106*au))/(86400*13.02),0.106,"c","kepler11"],[6.1,3.43*er,(2*3.141592653594*(0.159*au))/(86400*22.68),0.159,"d","kepler11"],[8.4,4.52*er,(2*3.141592653594*(0.1949*au))/(86400*31.99598),0.1949,"e","kepler11"],[2.34,2.612*er,(2*3.141592653594*(0.259*au))/(86400*46.688768),0.259,"f","kepler11"]]
+kepler11 = [[4.3,1.97*er,(2*3.141592653594*(0.091*au))/(86400*10.30),0.091,"b","kepler11"],[13.5,3.15*er,(2*3.141592653594*(0.106*au))/(86400*13.02),0.106,"c","kepler11"],[6.1,3.43*er,(2*3.141592653594*(0.159*au))/(86400*22.68),0.159,"d","kepler11"],[8.4,4.52*er,(2*3.141592653594*(0.1949*au))/(86400*31.99598),0.1949,"e","kepler11"],[2.34,2.612*er,(2*3.141592653594*(0.259*au))/(86400*46.688768),0.259,"f","kepler11"]]
 
 #all suns in one list
 stars_spec = sun + kepler11_star + trappist1_star
@@ -60,10 +60,6 @@ def gforce(p1,p2):
     # Calculate magnitude of distane vector.
     r_mag = mag(r_vec)
     # Calcualte unit vector of distance vector.
-    print(p1.name)
-    print(p1.pos)
-    print(p2.name)
-    print(p2.pos)
     r_hat = r_vec/r_mag
     # Calculate force magnitude.
     force_mag = G*p1.mass*p2.mass/r_mag**2
@@ -573,13 +569,12 @@ while (t >-1):#
     
     if bu == True: # if program_runs_continuous
         # Calculate forces
-        for star in stars:
+        for star in stars: 
             star.force = vector(0,0,0)
             for planet in planets:
                 star.force += gforce(star,planet)
             for star_other in stars:
-                if not star is star_other:
-                    star.force += gforce(star,star_other)
+                if not star is star_other: star.force += gforce(star,star_other)
 
         #star.force=star.force + gforce(star,planets[0]) +gforce(star,planet2)+gforce(star,planet3)+gforce(star,planet4)
         for planet in planets:
@@ -593,7 +588,7 @@ while (t >-1):#
         #planet2.force = gforce(planet2,star)+gforce(planet2,planet1)+gforce(planet2,planet3)+gforce(planet2,planet4)
         #planet3.force = gforce(planet3,star)+gforce(planet3,planet1)+gforce(planet3,planet2)+gforce(planet3,planet4)
         #planet4.force = gforce(planet4,star)+gforce(planet4,planet1)+gforce(planet4,planet2)+gforce(planet4,planet3)
-
+    
         # Update momenta.
         for star in stars: star.momentum += star.force*dt
         for planet in planets: planet.momentum += planet.force*dt
