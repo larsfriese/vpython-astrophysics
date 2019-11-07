@@ -489,11 +489,8 @@ button( bind=B_stop_trails, text='<div class="tooltip"><img src="https://www.mat
     
 obj_t = wtext(text="\n\n", pos=scene.title_anchor)
 
-graph(scroll=True, fast=False, xmin=0, xmax=10)
-g = gcurve()
-for x in arange(0,30,0.1):
-    rate(100)
-    g.plot( x, sin(x) )
+graph_plot = graph(scroll=True, fast=False, xmin=0, xmax=1, title=selected, xtitle="Time [s]", ytitle="Velocity [m/s]", width=16*40, height=9*25)
+plot_s = gcurve(label="Velocity", color=color.red)
 
 #while loop
 
@@ -652,8 +649,12 @@ while (t >-1):#
                 for planet in planets:
                     if planet.name == choose_p.selected:
                         scene.center = planet.pos
+                        plot_s.plot( pos = [t , mag(planet.momentum)] )
+                        graph_plot.xmax = t
                     elif planet.belonging == selected:
                         scene.center = planet.pos
+                        plot_s.plot( pos = [t , mag(planet.momentum)] )
+                        graph_plot.xmax = t
                     else:
                         pass
 
@@ -662,12 +663,16 @@ while (t >-1):#
                 for star in stars:
                     if star.name == choose_s.selected:
                         scene.center = star.pos
+                        plot_s.plot( pos = [t , mag(star.momentum)] )
+                        graph_plot.xmax = t
                         
         if following == True:
             if choose_s.selected is "none" and choose_p.selected is "none":
                 for planet in planets:
                     if planet.belonging == selected:
                         scene.center = planet.pos
+                        plot_s.plot( pos = [t , mag(planet.momentum)] )
+                        graph_plot.xmax = t
         
         if t == 60*5: scene.autoscale = False
         t += dt
