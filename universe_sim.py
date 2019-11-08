@@ -1,34 +1,39 @@
 from vpython import *
 e_graph = gcurve(color=color.blue)
 
-#global constans
+#scientific constants/variables
 G = (6.67*(10**-11)) # metres, kilograms and seconds, gravitational contstant
 au = 149597870700 # metres, astronomical unit with scale
 ms = 1.989*(10**30) # kilogramms, sun mass
 me = 5.9722*(10**24) # kilogramms, earth mass
 sl = 1 # light force of sun
-
-click_objects_visible = False
-# if help click objects are visible or not
-real_values_visuals = False
-#Use real-world values of radius and visuals,
-#good for simulations, bad for view
-asteroid_mass = 0.4
-#asteroid created by click mass
-asteroid_momentum = 0
-#asteroid created by click momentum,
-#1 dimensional
-
-#for the engine needed vaviables are 'stars_spec', 'planet_spec' and 'systems_list'
 sr = 695510 # sun radius in kilometres
 er = 6371 # earth radius in kilometres
 
-#sonnenmassen,radius(km),speed,pos in au,name for planetsystem, name sun, scale for scale_obj(distance),light force sun
+#programming constants/variables
+dt = 60*10*2 #60 = 1 Minute
+t = 0
+t_real = 0
+r = 30
+# if programm is running continous true/false
+programm_running = True
+# if help click objects are visible or not
+click_objects_visible = False
+#Use real-world values of radius and visuals,
+#good for simulations, bad for view
+real_values_visuals = False
+#asteroid created by click mass (*earths mass)
+asteroid_mass = 0.4
+#asteroid created by click momentum,
+#1 dimensional (y-axis)
+asteroid_momentum = 0
+
+# [[mass(kg), radius(km), speed(m/s), pos(au), name(system), name(sun), scale(how much au the systems are apart),lightforce(relative to sun)]]
 sun = [[0.89,sr,0,0,"solar_system","sun",0,1]]
 trappist1_star = [[0.089,0.121*sr,0,0.5,"trappist1","trappist-1",2,5.22*(10**-4)]]
 kepler11_star = [[0.95,1.10*sr,0,14,"kepler11","kepler-11",14,1.045]]
 
-# erdmassen,radius(km),speed,pos in au,name for tag,planet system
+# [[mass(kg), radius(km), speed(m/s), pos(au), name(planet), name(planet system to which it belongs)]]
 trappist1 = [[0.97,6371,82854,0.0115,"a","trappist1"],[1.16,6371,71029,0.0158,"b","trappist1"],[0.3,6371,59902,0.0223,"c","trappist1"],[0.7,6371,45478,0.0293,"d","trappist1"],[0.93,6371,(2*3.14159265359*(0.0385*au))/(86400*9.21),0.0385,"e","trappist1"],[1.51,6371,(2*3.14*(0.0469*au))/(86400*12.35),0.0469,"f","trappist1"],[0.33,6371,(2*3.141592653594*(0.0619*au))/(86400*18.77),0.0619,"g","trappist1"]]
 solar_system_planets = [[0.055,2439.7,47360,0.387099273,"merkur","solar_system"],[0.815,6051.8,35020,0.723,"venus","solar_system"],[1.0,6371,29722,1.0,"erde","solar_system"],[0.107,3389.5,24130,1.524,"mars","solar_system"]]
 solar_system_sattelites = [[0.01230,6371/4,29722,1.00257,"erde_mond1","solar_system"]]
@@ -38,10 +43,10 @@ kepler11 = [[4.3,1.97*er,(2*3.141592653594*(0.091*au))/(86400*10.30),0.091,"b","
 stars_spec = sun + kepler11_star + trappist1_star
 #all planets in one big list
 planet_spec = solar_system_planets + kepler11 + trappist1
-# all systems
+# all systems with planets in one big list
 systems_list=[solar_system_planets, kepler11, trappist1]#[trappist1, solar_system]
 
-
+#scene setup
 scene = canvas(title='<b>Planetary System Simulation</b>\n',
      x=0, y=0, width=16*55, height=9*55,
      center=vector(0,0,0), background=vector(0,0,0))
@@ -51,7 +56,8 @@ if real_values_visuals == False:
 else:
     scene.append_to_title('(Real visual values are used)\n\n')
 scene.append_to_title('<div id="seperator"></div><br>')
-#basic functions(gforce, collision etc.)
+
+# Basic functions(gforce, collision etc.)
 
 def gforce(p1,p2):
     # Calculate the gravitational force exerted on p1 by p2.
@@ -134,16 +140,8 @@ def chz(p1,sun):
     return
 #color of p1 changes because of distance to sun
 
-#planet systems
-#radius doesnt have to be scaled a it is not YET important to the calculations
-
-#star = sphere( pos=vector(0,0,0), radius=84179700*radius_zoom, color=color.yellow, mass = int(0.089*ms), momentum=vector(0,0,0), make_trail=True, shininess = 1, texture = "http://i.imgur.com/yoEzbtg.jpg"  )
-#label_star = label(pos=star.pos, text="trappist-1", xoffset=20, yoffset=12, space=star.radius, height=10, border=6, font="sans")
-#trappist1_scale = sphere( pos=vector(0,0,0), radius=0.2*au, color=color.white, make_trail=True, opacity = 0.2, visible=False )
-#star = sphere( pos=vector(0,0,0), radius=84179700*radius_zoom, color=color.yellow, mass = int(ms), momentum=vector(0,0,0), make_trail=True )
-#label_star = label(pos=star.pos, text="sonne", xoffset=20, yoffset=12, space=star.radius, height=10, border=6, font="sans")
-
 systems_strings=[]
+#List of all star and planet objects. Everything can be found in here
 stars=[]
 planets=[]
 
@@ -157,6 +155,7 @@ trails=[]
 #currently selected object
 selected="none"
 
+#Planet creation
 for ps in planet_spec:
     for star in stars_spec:
         if star[4] == ps[5]:
@@ -176,7 +175,7 @@ for ps in planet_spec:
     labels.append(label_ps)
     planets.append(planet)
 
-
+#Star creation
 for s in stars_spec:
     dist2 = 0
     for planet in planet_spec:
@@ -289,12 +288,6 @@ choose_s = menu( choices=lip_s, bind=M_S, value="stars" , pos=scene.title_anchor
 
 scene.append_to_title('\n\n')
 
-dt = 60*10*2 #60 = 1 Minute
-t = 0
-t_real = 0
-r = 30
-bu = True
-
 #widgets
 def S(s):
     global dt
@@ -310,13 +303,13 @@ def B_faster(b):
 button( bind=B_faster, text='>>', pos=scene.title_anchor )
 
 def B(b):
-    global bu
-    if bu == True:
-        bu = False
+    global programm_running
+    if programm_running == True:
+        programm_running = False
         b.text = "&#9654;"
         return
     else:
-        bu = True
+        programm_running = True
         b.text = "||"
 button( bind=B, text='||', pos=scene.title_anchor )
 
@@ -564,7 +557,7 @@ while (t >-1):#
         for i in systems_scale:
             i.visible = False
     
-    if bu == True: # if program_runs_continuous
+    if programm_running == True: # if program_runs_continuous
         # Calculate forces
         for star in stars: 
             star.force = vector(0,0,0)
