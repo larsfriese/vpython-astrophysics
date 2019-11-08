@@ -40,11 +40,20 @@ solar_system_sattelites = [[0.01230,6371/4,29722,1.00257,"erde_mond1","solar_sys
 kepler11 = [[4.3,1.97*er,(2*3.141592653594*(0.091*au))/(86400*10.30),0.091,"b","kepler11"],[13.5,3.15*er,(2*3.141592653594*(0.106*au))/(86400*13.02),0.106,"c","kepler11"],[6.1,3.43*er,(2*3.141592653594*(0.159*au))/(86400*22.68),0.159,"d","kepler11"],[8.4,4.52*er,(2*3.141592653594*(0.1949*au))/(86400*31.99598),0.1949,"e","kepler11"],[2.34,2.612*er,(2*3.141592653594*(0.259*au))/(86400*46.688768),0.259,"f","kepler11"]]
 
 #all suns in one list
-stars_spec = sun + kepler11_star + trappist1_star
+stars_spec = []
+stars_spec.extend(sun)
+stars_spec.extend(kepler11_star)
+stars_spec.extend(trappist1_star)
 #all planets in one big list
-planet_spec = solar_system_planets + kepler11 + trappist1
+planet_spec = []
+planet_spec.extend(solar_system_planets)
+planet_spec.extend(kepler11)
+planet_spec.extend(trappist1)
 # all systems with planets in one big list
-systems_list=[solar_system_planets, kepler11, trappist1]#[trappist1, solar_system]
+systems_list=[]#[trappist1, solar_system]
+systems_list.append(solar_system_planets)
+systems_list.append(kepler11)
+systems_list.append(trappist1)
 
 #scene setup
 scene = canvas(title='<b>Planetary System Simulation</b>\n',
@@ -206,12 +215,12 @@ for s in stars_spec:
     #lights.append(lamp)
 for i in systems_list:
     x = i[-1]
-    r = x[3]*2
+    ra = x[3]*2
     for star in stars_spec:
         if x[-1] == star[4]:
             pos_sys = star[2]
             belonging_s = star[4]
-    scale_obj = sphere( pos=vector(0,pos_sys,0), radius=r*au, color=color.white, make_trail=False, opacity = 0.2, visible=False, belonging=belonging_s )
+    scale_obj = sphere( pos=vector(0,pos_sys,0), radius=ra*au, color=color.white, make_trail=False, opacity = 0.2, visible=False, belonging=belonging_s )
     systems_scale.append(scale_obj)
 
 for l in labels:
@@ -574,11 +583,6 @@ while (t >-1):#
             for planet_other in planets:
                 if not planet is planet_other: planet.force += gforce(planet,planet_other)
 
-        #planet1.force = gforce(planet1,star)+gforce(planet1,planet2)+gforce(planet1,planet3)+gforce(planet1,planet4)
-        #planet2.force = gforce(planet2,star)+gforce(planet2,planet1)+gforce(planet2,planet3)+gforce(planet2,planet4)
-        #planet3.force = gforce(planet3,star)+gforce(planet3,planet1)+gforce(planet3,planet2)+gforce(planet3,planet4)
-        #planet4.force = gforce(planet4,star)+gforce(planet4,planet1)+gforce(planet4,planet2)+gforce(planet4,planet3)
-    
         # Update momenta.
         for star in stars: star.momentum += star.force*dt
         for planet in planets: planet.momentum += planet.force*dt
