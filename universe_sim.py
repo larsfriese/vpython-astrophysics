@@ -410,82 +410,6 @@ def B_clickaction(b):
 
 obj = scene.mouse.pick
 
-#click functions
-#def asteroid(evt):
-#    if clickaction == False:
-#        loc = evt.pos
-#        planet = sphere(pos=loc, radius=5417900*radius_zoom, color=color.white, mass=asteroid_mass, momentum=vector(0,asteroid_momentum,0), belonging="asteroid")
-#        label_ps = label(pos=planet.pos, text="asteroid", xoffset=20, yoffset=12, space=planet.radius, height=10, border=6, font="sans" )
-#        planets.append(planet)
-#        labels.append(label_ps)
-int = 0
-def activateLabelOrAsteroid(evt):
-    global selected
-    if clickaction == True:
-        for label1 in labels:
-            planet_i = labels.index(label1)
-            planet_obj = planets[planet_i]
-            planet_click_obj = click_obj_planets[planet_i]
-            try:
-                yy = planet_spec[planet_i]
-            except:
-                yy = "Unknown"
-            obj = scene.mouse.pick
-            if (obj == planet_click_obj): #mag(planet_obj.pos - evt.pos) < planet_obj.radius**1.15:
-                for ii in labels_s:
-                    ii.linewidth = 1
-                for iii in labels:
-                    iii.linewidth = 1
-                label1.line = False
-                label1.linewidth = 4
-                objex = '<span style="color: black;">(Destroyed)</span>'
-                if yy == undefined:
-                    if "asteroid" in planet_obj.belonging:
-                        for p in planets:
-                            if p.belonging == label1.text:
-                                objex = '<span style="color: green;">(Present)</span>'
-                        choose_s.selected = "none"
-                        choose_p.selected = "none"
-                        selected=planet_obj.belonging
-                        obj_t.text = '\n<div id="data">' + '<b>Asteroid</b> ' + objex + ' | Values:\n' + str((planet_obj.mass/me)) + '*me kg\n' + str(round(mag(planet_obj.momentum/planet_obj.mass)),1) + ' m/s\nBelongs to: ' + planet_obj.belonging_system + '</div> \n'
-                else:
-                    for p in planets:
-                        if p.name == label1.text:
-                            objex = '<span style="color: green;">(Present)</span>'
-                    choose_s.selected = "none"
-                    choose_p.selected = label1.text
-                    selected=planet_obj.name
-                    obj_t.text =  '\n<div id="data">' + '<b>' + planet_obj.name +'</b> ' + objex + ' | Values:\n' + str((planet_obj.mass/me)) + '*me kg\n' + str(round(mag(planet_obj.momentum/planet_obj.mass)),1) + ' m/s velocity\n' + str(yy[3]) + '*au, original distance to star\n' + str((planet_obj.mass*1000)/(3.14159265359*((planet_obj.original_radius*100000)**3)*(4/3))) + ' g/cm&#179</div>\n'
-    else:
-        # give asteroid a belonging system by finding the nearest star
-        distances=[]
-        names=[]
-        for i in stars:
-            distance = i.pos-evt.pos
-            distances.append(mag(distance))
-            names.append(i.belonging)
-        try:
-            index_worth = distances.index(min(distances))
-            system = names[index_worth]
-            if min(distances)>10*au: system="none"
-        except:
-            system="none"
-        # create asteroid
-        global int
-        loc = evt.pos
-        global asteroid_momentum
-        global asteroid_mass
-        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=vector(0,asteroid_momentum,0), belonging="asteroid"+str(int), belonging_system=system, name="asteroid"+str(int))
-        label_ps = label(pos=as_planet.pos, text="asteroid"+str(int), xoffset=20, yoffset=12, space=as_planet.radius, height=10, border=6, font="sans", belonging=system )
-        planet_click = sphere(  pos=as_planet.pos, radius=16*as_planet.radius, color=color.white, opacity=0.1, belonging=as_planet.belonging, belonging_system=system )
-        label_ps.line = False
-        click_obj_planets.append(planet_click)
-        planets.append(as_planet)
-        labels.append(label_ps)
-        int += 1
-
-scene.append_to_title('\n\nAsteroid Settings:\n\n')
-
 button( bind=B_clickaction, text='<img src="https://www.materialui.co/materialIcons/av/library_add_black_24x24.png"> OnClick Action: Object selection', pos=scene.title_anchor )
 scene.append_to_title('\n\n')
 
@@ -507,13 +431,6 @@ slider_ma = slider( bind=S_asteroid_mass, min=0, max=10000, value=4, pos=scene.t
 wt_ama = wtext(text="0.4 *me kg", pos=scene.title_anchor)
 
 scene.append_to_title('\n\nSettings:\n')
-
-#a_trial(c):
-#    
-#
-#r2 = radio(bind=a_trial, text='Trial')
-
-scene.bind('click', activateLabelOrAsteroid)
 
 following = True
 scene.append_to_title('\n')
@@ -571,6 +488,9 @@ def sandbox_modef(b):
     global testarrows
     if sandbox_mode == True:
         sandbox_mode = False
+        #setting the camera to look downwards a bit
+        scene.camera.pos += vector(0,17*au,0)
+        scene.camera.axis += vector(0,17*-au,0)
         b.text = '<img src="https://www.materialui.co/materialIcons/toggle/check_box_outline_blank_grey_24x24.png"> Sandboxmode: Off'
         create_scene()
         for i in testarrows:
@@ -580,6 +500,7 @@ def sandbox_modef(b):
         return
     else:
         sandbox_mode = True
+        scene.center = vector(0,0,0)
         b.text = '<img src="https://www.materialui.co/materialIcons/toggle/check_box_outline_blank_black_24x24.png"> Sandboxmode: On'
         for i in planets:
             i.visible = False
@@ -615,6 +536,94 @@ button( bind=sandbox_modef, text='<img src="https://www.materialui.co/materialIc
 
 graph_plot = graph(scroll=True, fast=False, xmin=0, xmax=1, title=selected, xtitle="Time [s]", ytitle="Velocity [m/s]", width=16*40, height=9*25)
 plot_s = gcurve(label="Velocity", color=color.red)
+
+drag = False
+s = None # declare s to be used below
+
+def down():
+    global s, drag
+    if clickaction == True:
+        for label1 in labels:
+            planet_i = labels.index(label1)
+            planet_obj = planets[planet_i]
+            planet_click_obj = click_obj_planets[planet_i]
+            try:
+                yy = planet_spec[planet_i]
+            except:
+                yy = "Unknown"
+            obj = scene.mouse.pick
+            if (obj == planet_click_obj): #mag(planet_obj.pos - evt.pos) < planet_obj.radius**1.15:
+                for ii in labels_s:
+                    ii.linewidth = 1
+                for iii in labels:
+                    iii.linewidth = 1
+                label1.line = False
+                label1.linewidth = 4
+                objex = '<span style="color: black;">(Destroyed)</span>'
+                if yy == "undefined":
+                    if "asteroid" in planet_obj.belonging:
+                        for p in planets:
+                            if p.belonging == label1.text:
+                                objex = '<span style="color: green;">(Present)</span>'
+                        choose_s.selected = "none"
+                        choose_p.selected = "none"
+                        selected=planet_obj.belonging
+                        s = planet_obj
+                        obj_t.text = '\n<div id="data">' + '<b>Asteroid</b> ' + objex + ' | Values:\n' + str((planet_obj.mass/me)) + '*me kg\n' + str(round(mag(planet_obj.momentum/planet_obj.mass),1)) + ' m/s\nBelongs to: ' + planet_obj.belonging_system + '</div> \n'
+                else:
+                    for p in planets:
+                        if p.name == label1.text:
+                            objex = '<span style="color: green;">(Present)</span>'
+                    choose_s.selected = "none"
+                    choose_p.selected = label1.text
+                    selected=planet_obj.name
+                    s = planet_obj
+                    obj_t.text =  '\n<div id="data">' + '<b>' + planet_obj.name +'</b> ' + objex + ' | Values:\n' + str((planet_obj.mass/me)) + '*me kg\n' + str(round(mag(planet_obj.momentum/planet_obj.mass),1)) + ' m/s velocity\n' + str(yy[3]) + '*au, original distance to star\n' + str((planet_obj.mass*1000)/(3.14159265359*((planet_obj.original_radius*100000)**3)*(4/3))) + ' g/cm&#179</div>\n'
+    else:
+        # give asteroid a belonging system by finding the nearest star
+        distances=[]
+        names=[]
+        for i in stars:
+            distance = i.pos-scene.mouse.pos
+            distances.append(mag(distance))
+            names.append(i.belonging)
+        try:
+            index_worth = distances.index(min(distances))
+            system = names[index_worth]
+            if min(distances)>10*au: system="none"
+        except:
+            system="none"
+        # create asteroid
+        global int
+        loc = scene.mouse.pos
+        global asteroid_momentum
+        global asteroid_mass
+        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=vector(0,asteroid_momentum,0), belonging="asteroid"+str(int), belonging_system=system, name="asteroid"+str(int))
+        label_ps = label(pos=as_planet.pos, text="asteroid"+str(int), xoffset=20, yoffset=12, space=as_planet.radius, height=10, border=6, font="sans", belonging=system )
+        planet_click = sphere(  pos=as_planet.pos, radius=16*as_planet.radius, color=color.white, opacity=0.1, belonging=as_planet.belonging, belonging_system=system )
+        label_ps.line = False
+        click_obj_planets.append(planet_click)
+        planets.append(as_planet)
+        labels.append(label_ps)
+        int += 1
+        s = as_planet
+    drag = True
+
+def move():
+    global drag, s
+    if drag: # mouse button is down
+        s.pos = scene.mouse.pos
+
+def up():
+    global drag, s
+    s.color = color.cyan
+    drag = False
+
+scene.bind("mousedown", down)
+
+scene.bind("mousemove", move)
+
+scene.bind("mouseup", up)
 
 #setting the camera to look downwards a bit
 scene.camera.pos += vector(0,17*au,0)
@@ -815,7 +824,7 @@ while (t >-1):#
                         scene.center = planet.pos
                         plot_s.plot( pos = [t , mag(planet.momentum)] )
                         graph_plot.xmax = t
-
+        
         if t == 60*5:
             scene.autoscale = False
         t += dt
