@@ -107,7 +107,7 @@ def collision(p1,p2):
     print(str(energy_scale) + "   " + str(mass_scale) + "   " + str(velocity_scale))
     
     #If energy is 100 times bigger than on other object
-    if energy_scale < (1/100):
+    if mass_scale < (1/100):
         if p1 in planets:
             li = planets.index(p1)
             labels[li].visible = False
@@ -134,7 +134,7 @@ def collision(p1,p2):
         p2.radius = new_radius
         p2.momentum = new_momentum
         return
-    elif energy_scale > 100:
+    elif mass_scale > 100:
         if p2 in planets:
             li = planets.index(p2)
             labels[li].visible = False
@@ -146,10 +146,12 @@ def collision(p1,p2):
                     i.visible = False
                     del i
                     return
-                if i.belonging == p2.name:
+                elif i.belonging == p2.name:
                     click_obj_planets.remove(i)
                     i.visible = False
                     del i
+                else:
+                    pass
         if p2 in stars:
             li_s = stars.index(p2)
             labels_s[li_s].visible = False
@@ -161,34 +163,27 @@ def collision(p1,p2):
         p1.radius = new_radius
         p1.momentum = new_momentum
         return
+    elif "Fragment" in p1.name and p2.name:
+        print("test")
     else:
-        for i in range(10):
-            planet = sphere( pos=p1.pos+vector(0,10000,0), radius=p1.radius*0.1, color=color.white, mass = p1.mass*0.1, momentum=-p1.momentum, make_trail=False, belonging=p1.belonging, name="Fragment")
-            label_ps = label(pos=planet.pos, text=planet.name, xoffset=20, yoffset=12, space=planet.radius, height=10, border=6, font="sans", belonging=p1.belonging)
-            labels.append(label_ps)
-            planets.append(planet)
-        if p2 in planets:
-            li = planets.index(p2)
-            labels[li].visible = False
-            del labels[li]
-            planets.remove(planets[li])
-            for i in click_obj_planets: 
-                if i.belonging == p2.belonging:
-                    click_obj_planets.remove(i)
-                    i.visible = False
-                    del i
-                    return
-                if i.belonging == p2.name:
-                    click_obj_planets.remove(i)
-                    i.visible = False
-                    del i
-        if p2 in stars:
-            li_s = stars.index(p2)
-            labels_s[li_s].visible = False
-            del labels_s[li_s]
-            stars.remove(stars[li_s])
+        p2_mass = p2.mass
+        p2_momentum = p2.momentum
+        p2_radius = p2.radius
+        p2_pos = p2.pos
+        p2_belonging = p2.belonging
+        
+        planets.remove(p2)
         p2.visible = False
         del p2
+
+        for i in range(5):
+            planet = sphere( pos=p2_pos+vector(0,0,100000+i*(p2_radius*0.1)), radius=p2_radius*0.1, color=color.white, mass = p2_mass*0.1, momentum=p1.momentum, make_trail=False, belonging=p2_belonging, name="Fragment" + str(i))
+            print(p1.momentum)
+            print(planet.momentum)
+            label_ps = label(pos=planet.pos, text="Fragment" + str(i), xoffset=20, yoffset=12, space=planet.radius/10, height=10, border=6, font="sans", belonging=p2_belonging)
+            label_ps.line = False
+            labels.append(label_ps)
+            planets.append(planet)
 
 #forms to sphere together into one object
 
@@ -317,9 +312,11 @@ def M(m):
                     selected=i[4]
                     obj_t.text =  '\n<div id="data">' + '<b>' + i[4] +'</b> ' + objex + ' | Initial Values:\n' + str(i[0]) + '*earths mass\n' + str(round(i[2], 2)) + ' m/s velocity\n' + str(i[3]) + '*astronomical unit, \noriginal distance to star</div>\n'
                     choose_s.selected= "none"
+                    print(scene.camera.pos)
                 else:
                     obj_t.text =  '\n<div id="data">' + '<b>' + i[4] +'</b> ' + objex + ' | Initial Values:\n' + str(i[0]) + '*earths mass\n' + str(round(i[2], 2)) + ' m/s velocity\n' + str(i[3]) + '*astronomical unit, \noriginal distance to star</div>\n'
                     choose_s.selected= "none"
+                    print(scene.camera.pos)
     if m.selected == "none":
         for x in labels:
             x.linewidth = 1
@@ -392,7 +389,7 @@ button( bind=B, text='||', pos=scene.title_anchor )
 
 wt2 = wtext(text="Realtime/Time: " + str(round((t/60)/60, 1)) + "h/" + str(round(t_real, 1)) + "s", pos=scene.title_anchor)
 
-scene.append_to_title('<div id="seperator"></div>')
+obj_settings = wtext(text="\n\nAsteroid Settings:\n\n", pos=scene.title_anchor)
 
 clickaction = False
 def B_clickaction(b):
@@ -410,7 +407,7 @@ def B_clickaction(b):
 
 obj = scene.mouse.pick
 
-button( bind=B_clickaction, text='<img src="https://www.materialui.co/materialIcons/av/library_add_black_24x24.png"> OnClick Action: Object selection', pos=scene.title_anchor )
+button( bind=B_clickaction, text='<img src="https://www.materialui.co/materialIcons/av/library_add_black_24x24.png"> OnClick Action: Asteroid creation', pos=scene.title_anchor )
 scene.append_to_title('\n\n')
 
 def S_asteroid_momentum(s):
@@ -430,20 +427,13 @@ def S_asteroid_mass(s):
 slider_ma = slider( bind=S_asteroid_mass, min=0, max=10000, value=4, pos=scene.title_anchor, length=200)
 wt_ama = wtext(text="0.4 *me kg", pos=scene.title_anchor)
 
-scene.append_to_title('\n\nSettings:\n')
+scene.append_to_title('\n\nSettings:\n\n')
 
-following = True
+def B_clear_trails(b):
+    for x in trails:
+        x.clear()
+button( bind=B_clear_trails, text='<img src="https://www.materialui.co/materialIcons/action/highlight_off_black_24x24.png"> Clear all trails', pos=scene.title_anchor )
 scene.append_to_title('\n')
-def B_following(b):
-    global following
-    if following == True:
-        following = False
-        b.text = '<img src="https://www.materialui.co/materialIcons/image/switch_camera_grey_24x24.png"> Camera not following targets'
-        return
-    else:
-        following = True
-        b.text = '<img src="https://www.materialui.co/materialIcons/image/switch_camera_black_24x24.png"> Camera following targets'
-button( bind=B_following, text='<img src="https://www.materialui.co/materialIcons/image/switch_camera_black_24x24.png"> Camera following targets', pos=scene.title_anchor )
 
 better_view = False
 def B_better_view(b):
@@ -457,26 +447,35 @@ def B_better_view(b):
         better_view = False
 button( bind=B_better_view, text='<img src="https://www.materialui.co/materialIcons/image/camera_grey_24x24.png"> Normal view', pos=scene.title_anchor )
 
-def B_clear_trails(b):
-    for x in trails:
-        x.clear()
-button( bind=B_clear_trails, text='<img src="https://www.materialui.co/materialIcons/action/highlight_off_black_24x24.png"> Clear all trails', pos=scene.title_anchor )
+following = True
+scene.append_to_title('\n')
+def B_following(b):
+    global following
+    if following == True:
+        following = False
+        b.text = 'Camera not following targets'
+        return
+    else:
+        following = True
+        b.text = 'Camera following targets'
+checkbox( bind=B_following, text='Camera following targets', pos=scene.title_anchor )
+scene.append_to_title('\n')
 
 trails_tf = True
 def B_stop_trails(b):
     global trails_tf
     if trails_tf == True:
         trails_tf = False
-        b.text = '<img src="https://www.materialui.co/materialIcons/av/not_interested_grey_24x24.png"> Trails: False'
+        b.text = 'Trails: False'
         for x in trails:
             x.stop()
         return
     else:
         trails_tf = True
-        b.text = '<img src="https://www.materialui.co/materialIcons/av/not_interested_black_24x24.png"> Trails: False'
+        b.text = 'Trails: True'
         for x in trails:
             x.start()
-button( bind=B_stop_trails, text='<div class="tooltip"><img src="https://www.materialui.co/materialIcons/av/not_interested_black_24x24.png"> Trails: True', pos=scene.title_anchor )
+checkbox( bind=B_stop_trails, text='Trails: True', pos=scene.title_anchor )
     
 obj_t = wtext(text="\n\nSandboxmode Settings:\n\n", pos=scene.title_anchor)
 
@@ -491,7 +490,7 @@ def sandbox_modef(b):
         #setting the camera to look downwards a bit
         scene.camera.pos += vector(0,17*au,0)
         scene.camera.axis += vector(0,17*-au,0)
-        b.text = '<img src="https://www.materialui.co/materialIcons/toggle/check_box_outline_blank_grey_24x24.png"> Sandboxmode: Off'
+        b.text = 'Sandboxmode: Off'
         create_scene()
         for i in testarrows:
             i.visible = False
@@ -501,7 +500,7 @@ def sandbox_modef(b):
     else:
         sandbox_mode = True
         scene.center = vector(0,0,0)
-        b.text = '<img src="https://www.materialui.co/materialIcons/toggle/check_box_outline_blank_black_24x24.png"> Sandboxmode: On'
+        b.text = 'Sandboxmode: On'
         for i in planets:
             i.visible = False
             del i
@@ -532,14 +531,14 @@ def sandbox_modef(b):
         testarrows.append(pointerx)
         testarrows.append(pointery)
         testarrows.append(pointerz)
-button( bind=sandbox_modef, text='<img src="https://www.materialui.co/materialIcons/toggle/check_box_outline_blank_grey_24x24.png"> Sandboxmode: Off', pos=scene.title_anchor )
+checkbox( bind=sandbox_modef, text='Sandboxmode: Off', pos=scene.title_anchor )
 
 graph_plot = graph(scroll=True, fast=False, xmin=0, xmax=1, title=selected, xtitle="Time [s]", ytitle="Velocity [m/s]", width=16*40, height=9*25)
 plot_s = gcurve(label="Velocity", color=color.red)
 
 drag = False
 s = None # declare s to be used below
-
+int_var = 0
 def down():
     global s, drag
     if clickaction == True:
@@ -578,6 +577,7 @@ def down():
                     choose_p.selected = label1.text
                     selected=planet_obj.name
                     s = planet_obj
+                    scene.camera.pos = planet_obj.pos + vector(au,0,0)
                     obj_t.text =  '\n<div id="data">' + '<b>' + planet_obj.name +'</b> ' + objex + ' | Values:\n' + str((planet_obj.mass/me)) + '*me kg\n' + str(round(mag(planet_obj.momentum/planet_obj.mass),1)) + ' m/s velocity\n' + str(yy[3]) + '*au, original distance to star\n' + str((planet_obj.mass*1000)/(3.14159265359*((planet_obj.original_radius*100000)**3)*(4/3))) + ' g/cm&#179</div>\n'
     else:
         # give asteroid a belonging system by finding the nearest star
@@ -594,18 +594,18 @@ def down():
         except:
             system="none"
         # create asteroid
-        global int
+        global int_var
         loc = scene.mouse.pos
         global asteroid_momentum
         global asteroid_mass
-        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=vector(0,asteroid_momentum,0), belonging="asteroid"+str(int), belonging_system=system, name="asteroid"+str(int))
-        label_ps = label(pos=as_planet.pos, text="asteroid"+str(int), xoffset=20, yoffset=12, space=as_planet.radius, height=10, border=6, font="sans", belonging=system )
+        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=vector(0,asteroid_momentum,0), belonging="asteroid"+str(int_var), belonging_system=system, name="asteroid"+str(int))
+        label_ps = label(pos=as_planet.pos, text="asteroid"+str(int_var), xoffset=20, yoffset=12, space=as_planet.radius, height=10, border=6, font="sans", belonging=system )
         planet_click = sphere(  pos=as_planet.pos, radius=16*as_planet.radius, color=color.white, opacity=0.1, belonging=as_planet.belonging, belonging_system=system )
         label_ps.line = False
         click_obj_planets.append(planet_click)
         planets.append(as_planet)
         labels.append(label_ps)
-        int += 1
+        int_var += 1
         s = as_planet
     drag = True
 
