@@ -184,7 +184,6 @@ def collision(p1,p2):
             label_ps.line = False
             labels.append(label_ps)
             planets.append(planet)
-
 #forms to sphere together into one object
 
 def chz(p1,sun):
@@ -624,6 +623,14 @@ scene.bind("mousedown", down)
 scene.bind("mousemove", move)
 
 scene.bind("mouseup", up)
+
+obj_g = wtext(text="\n<div id='test'>Environmental Settings:\n\n", pos=scene.caption_anchor)
+def ev_g(s):
+    global G
+    G = G*s.value
+    wt_g.text = "G: " + str(G) + " m^3/kg*s^2"
+sliderg = slider( bind=ev_g, min=0, max=2, value=1, pos=scene.caption_anchor, length=200)
+wt_g = wtext(text="G: 6.67e-11 m^3/kg*s^2", pos=scene.caption_anchor)
 
 #setting the camera to look downwards a bit
 scene.camera.pos += vector(0,17*au,0)
