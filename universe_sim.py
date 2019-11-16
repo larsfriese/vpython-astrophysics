@@ -26,7 +26,7 @@ real_values_visuals = True
 asteroid_mass = 0.4
 #asteroid created by click momentum,
 #1 dimensional (y-axis)
-asteroid_momentum = 0
+asteroid_momentum = vector(0,0,0)
 
 # [[mass(kg), radius(km), speed(m/s), pos(au), name(system), name(sun), scale(how much au the systems are apart),lightforce(relative to sun)]]
 sun = [[0.89,sr,0,0,"solar_system","sun",0,1]]
@@ -104,10 +104,40 @@ def collision(p1,p2):
     energy_scale = ((1/2)*p1.mass*(mag(p1.momentum)**2))/((1/2)*p2.mass*(mag(p2.momentum)**2))
     mass_scale = p1.mass/p2.mass
     velocity_scale = mag(p1.momentum/p1.mass)/mag(p2.momentum/p2.mass)
-    print(str(energy_scale) + "   " + str(mass_scale) + "   " + str(velocity_scale))
+    print("Relation of Energy, Mass and Velocity of colliding Objects: " + str(energy_scale) + "   " + str(mass_scale) + "   " + str(velocity_scale))
     
     #If energy is 100 times bigger than on other object
-    if mass_scale < (1/100):
+    #if mass_scale < (1/100):
+    if p1.mass > p2.mass:
+        if p2 in planets:
+            li = planets.index(p2)
+            labels[li].visible = False
+            del labels[li]
+            planets.remove(planets[li])
+            for i in click_obj_planets: 
+                if i.belonging == p2.belonging:
+                    click_obj_planets.remove(i)
+                    i.visible = False
+                    del i
+                    return
+                elif i.belonging == p2.name:
+                    click_obj_planets.remove(i)
+                    i.visible = False
+                    del i
+                else:
+                    pass
+        if p2 in stars:
+            li_s = stars.index(p2)
+            labels_s[li_s].visible = False
+            del labels_s[li_s]
+            stars.remove(stars[li_s])
+        p2.visible = False
+        del p2
+        p1.mass = new_mass
+        p1.radius = new_radius
+        p1.momentum = new_momentum
+        return
+    else:
         if p1 in planets:
             li = planets.index(p1)
             labels[li].visible = False
@@ -134,7 +164,7 @@ def collision(p1,p2):
         p2.radius = new_radius
         p2.momentum = new_momentum
         return
-    elif mass_scale > 100:
+"""    elif mass_scale > 100:
         if p2 in planets:
             li = planets.index(p2)
             labels[li].visible = False
@@ -164,7 +194,8 @@ def collision(p1,p2):
         p1.momentum = new_momentum
         return
     elif "Fragment" in p1.name and p2.name:
-        print("test")
+        print("Frgament hit.")
+        
     else:
         p2_mass = p2.mass
         p2_momentum = p2.momentum
@@ -183,7 +214,7 @@ def collision(p1,p2):
             label_ps = label(pos=planet.pos, text="Fragment" + str(i), xoffset=20, yoffset=12, space=planet.radius/10, height=10, border=6, font="sans", belonging=p2_belonging)
             label_ps.line = False
             labels.append(label_ps)
-            planets.append(planet)
+            planets.append(planet)"""
 #forms to sphere together into one object
 
 def chz(p1,sun):
@@ -398,10 +429,14 @@ def B_clickaction(b):
         clickaction = False
         click_objects_visible = False
         b.text = '<img src="https://www.materialui.co/materialIcons/av/library_add_black_24x24.png"> OnClick Action: Asteroid creation'
+        asteroid_momentum_winput.disabled=False
+        asteroid_mass_winput.disabled=False
         return
     else:
         clickaction = True
         b.text = '<img src="https://www.materialui.co/materialIcons/action/touch_app_black_24x24.png"> OnClick Action: Object selection'
+        asteroid_momentum_winput.disabled=True
+        asteroid_mass_winput.disabled=True
         click_objects_visible = True
 
 obj = scene.mouse.pick
@@ -409,22 +444,20 @@ obj = scene.mouse.pick
 button( bind=B_clickaction, text='<img src="https://www.materialui.co/materialIcons/av/library_add_black_24x24.png"> OnClick Action: Asteroid creation', pos=scene.title_anchor )
 scene.append_to_title('\n\n')
 
-def S_asteroid_momentum(s):
+def asteroid_momentum_func(s):
     global asteroid_momentum
     global asteroid_mass
-    asteroid_momentum = s.value*(asteroid_mass*me)
-    wt_am.text = str(s.value) + " m/s speed (y-axis)"
-slider_m = slider( bind=S_asteroid_momentum, min=0, max=100000, value=0, pos=scene.title_anchor, length=200)
-wt_am = wtext(text="0 m/s speed (y-axis)", pos=scene.title_anchor)
+    asteroid_momentum = vector(0,s.number*(asteroid_mass*me),0)
+asteroid_momentum_winput = winput( bind=asteroid_momentum_func, text="0", pos=scene.title_anchor )
+wt_am = wtext(text=" m/s speed (y-axis)", pos=scene.title_anchor)
 
 scene.append_to_title('\n')
 
-def S_asteroid_mass(s):
+def asteroid_mass_func(s):
     global asteroid_mass
-    asteroid_mass = (s.value/10)
-    wt_ama.text = str(round((s.value/10), 2)) + " *me kg" 
-slider_ma = slider( bind=S_asteroid_mass, min=0, max=10000, value=4, pos=scene.title_anchor, length=200)
-wt_ama = wtext(text="0.4 *me kg", pos=scene.title_anchor)
+    asteroid_mass = s.number
+asteroid_mass_winput = winput( bind=asteroid_mass_func, text="0.4", pos=scene.title_anchor)
+wt_ama = wtext(text="*me kg", pos=scene.title_anchor)
 
 scene.append_to_title('\n\nSettings:\n\n')
 
@@ -596,8 +629,9 @@ def down():
         global int_var
         loc = scene.mouse.pos
         global asteroid_momentum
+        print(asteroid_momentum)
         global asteroid_mass
-        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=vector(0,asteroid_momentum,0), belonging="asteroid"+str(int_var), belonging_system=system, name="asteroid"+str(int))
+        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=asteroid_momentum, belonging="asteroid"+str(int_var), belonging_system=system, name="asteroid"+str(int))
         label_ps = label(pos=as_planet.pos, text="asteroid"+str(int_var), xoffset=20, yoffset=12, space=as_planet.radius, height=10, border=6, font="sans", belonging=system )
         planet_click = sphere(  pos=as_planet.pos, radius=16*as_planet.radius, color=color.white, opacity=0.1, belonging=as_planet.belonging, belonging_system=system )
         label_ps.line = False
@@ -619,9 +653,7 @@ def up():
     drag = False
 
 scene.bind("mousedown", down)
-
 scene.bind("mousemove", move)
-
 scene.bind("mouseup", up)
 
 obj_g = wtext(text="\n<div id='test'>Environmental Settings:\n\n", pos=scene.caption_anchor)
