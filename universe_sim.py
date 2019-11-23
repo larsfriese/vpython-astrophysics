@@ -9,6 +9,13 @@ me = 5.9722*(10**24) # kilogramms, earth mass
 sl = 1 # light force of sun
 sr = 695510 # sun radius in kilometres
 er = 6371 # earth radius in kilometres
+specific_heat_oxygen = 919 #J/(kg K)
+specific_heat_iron = 449 #J/(kg K)
+specific_heat_silicon = 710 #J/(kg K)
+specific_heat_natrium = 1260 #J/(kg K)
+specific_heat_graphite = 717 #J/(kg K)
+specific_heat_helium = 5192 #J/(kg K)
+specific_heat_hydrogen = 14300 #J/(kg K)
 
 #programming constants/variables
 dt = 60*10*2 #60 = 1 Minute
@@ -35,7 +42,7 @@ kepler11_star = [[0.95,1.10*sr,0,35,"kepler11","kepler-11",35,1.045]]
 
 # [[mass(kg), radius(km), speed(m/s), pos(au), name(planet), name(planet system to which it belongs)]]
 trappist1 = [[0.97,6371,82854,0.0115,"a","trappist1"],[1.16,6371,71029,0.0158,"b","trappist1"],[0.3,6371,59902,0.0223,"c","trappist1"],[0.7,6371,45478,0.0293,"d","trappist1"],[0.93,6371,(2*3.14159265359*(0.0385*au))/(86400*9.21),0.0385,"e","trappist1"],[1.51,6371,(2*3.14*(0.0469*au))/(86400*12.35),0.0469,"f","trappist1"],[0.33,6371,(2*3.141592653594*(0.0619*au))/(86400*18.77),0.0619,"g","trappist1"]]
-solar_system_planets = [[0.055,2439.7,47360,0.387099273,"mercury","solar_system"],[0.815,6051.8,35020,0.723,"venus","solar_system"],[1.0,6371,29722,1.0,"earth","solar_system"],[0.01,1737.1,29722+1021.9334,1.0+0.00257356604,"earth - moon","solar_system"],[0.107,3389.5,24130,1.524,"mars","solar_system"],[318,69911,13070,5.203,"jupiter","solar_system"],[95.16,58232,9690,9.5,"saturn","solar_system"],[14.54,25362,6810,19.2,"uranus","solar_system"],[17.15,24622,5430,30.1,"neptun","solar_system"]]
+solar_system_planets = [[0.055,2439.7,47360,0.387099273,"mercury","solar_system",(specific_heat_iron+specific_heat_oxygen+specific_heat_natrium)/3,["iron", "oxygen", "natrium"],700],[0.815,6051.8,35020,0.723,"venus","solar_system"],[1.0,6371,29722,1.0,"earth","solar_system",(specific_heat_oxygen+specific_heat_silicon)/2,["oxygen","silicon"],288],[0.01,1737.1,29722+1021.9334,1.0+0.00257356604,"earth - moon","solar_system"],[0.107,3389.5,24130,1.524,"mars","solar_system"],[318,69911,13070,5.203,"jupiter","solar_system"],[95.16,58232,9690,9.5,"saturn","solar_system"],[14.54,25362,6810,19.2,"uranus","solar_system"],[17.15,24622,5430,30.1,"neptun","solar_system"]]
 solar_system_sattelites = [[0.01230,6371/4,29722,1.00257,"erde_mond1","solar_system"]]
 kepler11 = [[4.3,1.97*er,(2*3.141592653594*(0.091*au))/(86400*10.30),0.091,"b","kepler11"],[13.5,3.15*er,(2*3.141592653594*(0.106*au))/(86400*13.02),0.106,"c","kepler11"],[6.1,3.43*er,(2*3.141592653594*(0.159*au))/(86400*22.68),0.159,"d","kepler11"],[8.4,4.52*er,(2*3.141592653594*(0.1949*au))/(86400*31.99598),0.1949,"e","kepler11"],[2.34,2.612*er,(2*3.141592653594*(0.259*au))/(86400*46.688768),0.259,"f","kepler11"]]
 
@@ -106,6 +113,9 @@ def collision(p1,p2):
     velocity_scale = mag(p1.momentum/p1.mass)/mag(p2.momentum/p2.mass)
     print("Relation of Energy, Mass and Velocity of colliding Objects: " + str(energy_scale) + "   " + str(mass_scale) + "   " + str(velocity_scale))
     
+    ekin1 = (1/2)*p1.mass*(mag(p1.momentum/p1.mass)**2)
+    ekin2 = (1/2)*p2.mass*(mag(p2.momentum/p2.mass)**2)
+
     #If energy is 100 times bigger than on other object
     #if mass_scale < (1/100):
     if p1.mass > p2.mass:
@@ -115,17 +125,10 @@ def collision(p1,p2):
             del labels[li]
             planets.remove(planets[li])
             for i in click_obj_planets: 
-                if i.belonging == p2.belonging:
+                if i.belonging == p2.belonging or i.belonging == p2.name:
                     click_obj_planets.remove(i)
                     i.visible = False
                     del i
-                    return
-                elif i.belonging == p2.name:
-                    click_obj_planets.remove(i)
-                    i.visible = False
-                    del i
-                else:
-                    pass
         if p2 in stars:
             li_s = stars.index(p2)
             labels_s[li_s].visible = False
@@ -136,6 +139,12 @@ def collision(p1,p2):
         p1.mass = new_mass
         p1.radius = new_radius
         p1.momentum = new_momentum
+
+        ekin_total = (1/2)*p1.mass*(mag(p1.momentum/p1.mass)**2)
+        ekin_leftover = (ekin1+ekin2) - ekin_total
+        temp_change = ekin_leftover/(p1.mass*p1.heat_capacity)
+        p1.temp += temp_change
+
         return
     else:
         if p1 in planets:
@@ -144,12 +153,7 @@ def collision(p1,p2):
             del labels[li]
             planets.remove(planets[li])
             for i in click_obj_planets: 
-                if i.belonging == p1.belonging:
-                    click_obj_planets.remove(i)
-                    i.visible = False
-                    del i
-                    return
-                if i.belonging == p1.name:
+                if i.belonging == p1.belonging or i.belonging == p1.name:
                     click_obj_planets.remove(i)
                     i.visible = False
                     del i
@@ -163,58 +167,13 @@ def collision(p1,p2):
         p2.mass = new_mass
         p2.radius = new_radius
         p2.momentum = new_momentum
-        return
-"""    elif mass_scale > 100:
-        if p2 in planets:
-            li = planets.index(p2)
-            labels[li].visible = False
-            del labels[li]
-            planets.remove(planets[li])
-            for i in click_obj_planets: 
-                if i.belonging == p2.belonging:
-                    click_obj_planets.remove(i)
-                    i.visible = False
-                    del i
-                    return
-                elif i.belonging == p2.name:
-                    click_obj_planets.remove(i)
-                    i.visible = False
-                    del i
-                else:
-                    pass
-        if p2 in stars:
-            li_s = stars.index(p2)
-            labels_s[li_s].visible = False
-            del labels_s[li_s]
-            stars.remove(stars[li_s])
-        p2.visible = False
-        del p2
-        p1.mass = new_mass
-        p1.radius = new_radius
-        p1.momentum = new_momentum
-        return
-    elif "Fragment" in p1.name and p2.name:
-        print("Frgament hit.")
-        
-    else:
-        p2_mass = p2.mass
-        p2_momentum = p2.momentum
-        p2_radius = p2.radius
-        p2_pos = p2.pos
-        p2_belonging = p2.belonging
-        
-        planets.remove(p2)
-        p2.visible = False
-        del p2
 
-        for i in range(5):
-            planet = sphere( pos=p2_pos+vector(0,0,100000+i*(p2_radius*0.1)), radius=p2_radius*0.1, color=color.white, mass = p2_mass*0.1, momentum=p1.momentum, make_trail=False, belonging=p2_belonging, name="Fragment" + str(i))
-            print(p1.momentum)
-            print(planet.momentum)
-            label_ps = label(pos=planet.pos, text="Fragment" + str(i), xoffset=20, yoffset=12, space=planet.radius/10, height=10, border=6, font="sans", belonging=p2_belonging)
-            label_ps.line = False
-            labels.append(label_ps)
-            planets.append(planet)"""
+        ekin_total = (1/2)*p2.mass*(mag(p2.momentum/p2.mass)**2)
+        ekin_leftover = (ekin1+ekin2) - ekin_total
+        temp_change = ekin_leftover/(p2.mass*p2.heat_capacity)
+        p2.temp += temp_change
+
+        return
 #forms to sphere together into one object
 
 def chz(p1,sun):
@@ -247,7 +206,7 @@ systems_scale=[]
 click_obj_planets=[]
 trails=[]
 #currently selected object
-selected="none"
+selected="none selected"
 
 def create_scene():
     #Planet creation
@@ -260,8 +219,13 @@ def create_scene():
             p_r = ps[1]*1000
         else:
             p_r = (ps[1]/20)*radius_star
+        
+        if len(ps)<9:
+            ps.append(specific_heat_oxygen)
+            ps.append("oxygen")
+            ps.append(200)
 
-        planet = sphere( pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1] )
+        planet = sphere( pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1], heat_capacity=ps[6], composition=ps[7], temp=ps[8] )
         trail = attach_trail(planet, radius=planet.radius*30, color=color.white, retain=1000 )
         label_ps = label(pos=planet.pos, text=ps[4], xoffset=20, yoffset=12, space=planet.radius, height=10, border=6, font="sans", belonging=ps[5], original_name = ps[4])
         planet_click = sphere(  pos=planet.pos, radius=6*planet.radius, color=color.white, opacity=0.05, belonging=ps[4], belonging_system=ps[5] )
@@ -287,7 +251,11 @@ def create_scene():
         #else:
             #s_r = (dist/20)
         
-        star = sphere( pos=vector(s[3]*au,0,0), radius=s_r, color=color.yellow, mass = s[0]*ms, momentum=vector(0,0,-s[2]*s[0]*ms), make_trail=False, belonging = s[4], lightforce = s[7], name=s[5], pickable=True, original_radius=s[1] )
+        if len(s)<10:
+            ps.append(specific_heat_hydrogen)
+            ps.append(15000000)
+
+        star = sphere( pos=vector(s[3]*au,0,0), radius=s_r, color=color.yellow, mass = s[0]*ms, momentum=vector(0,0,-s[2]*s[0]*ms), make_trail=False, belonging = s[4], lightforce = s[7], name=s[5], pickable=True, original_radius=s[1], heat_capacity=ps[9], temp=ps[10] )
         trail = attach_trail(star, radius=(s_r/2), color=color.white )
         #lamp = local_light(pos=star.pos, color=color.yellow, belonging = s[4])
         label_star = label(pos=star.pos, text=s[5], xoffset=20, yoffset=12, space=star.radius, height=10, border=6, font="sans", belonging = s[4], original_name = s[5])
@@ -299,15 +267,15 @@ def create_scene():
         trails.append(trail)
         stars.append(star)
         #lights.append(lamp)
-    for i in systems_list:
-        x = i[-1]
-        ra = x[3]*2
-        for star in stars_spec:
-            if x[-1] == star[4]:
-                pos_sys = star[2]
-                belonging_s = star[4]
-        scale_obj = sphere( pos=vector(0,pos_sys,0), radius=ra*au, color=color.white, make_trail=False, opacity = 0.2, visible=False, belonging=belonging_s )
-        systems_scale.append(scale_obj)
+    #for i in systems_list:
+    #    x = i[-1]
+    #    ra = x[3]*2
+    #    for star in stars_spec:
+    #        if x[-1] == star[4]:
+    #            pos_sys = star[2]
+    #            belonging_s = star[4]
+    #    scale_obj = sphere( pos=vector(0,pos_sys,0), radius=ra*au, color=color.white, make_trail=False, opacity = 0.2, visible=False, belonging=belonging_s )
+    #    systems_scale.append(scale_obj)
 
     for l in labels:
         l.line = False
@@ -325,28 +293,23 @@ for z in systems_list:
         lip.append(i[4])
 def M(m):
     global selected
-    objex = '<span style="color: black;">(Destroyed)</span>'
-    for i in planets:
-        if i.name == m.selected:
-            objex = '<span style="color: green;">(Present)</span>'
     for i in planet_spec:
         if i[4] == m.selected:
+            #reset all label edits at stars
             for u in labels_s:
                 u.linewidth = 1
+            #reset all label edits at planets
             for ii in labels:
                 ii.linewidth = 1
+                #select label and get planet informations
                 if ii.text == i[4]:
                     ii.line = False
                     ii.linewidth = 4
                     scene.center = ii.pos
                     selected=i[4]
-                    obj_t.text =  '\n<div id="data">' + '<b>' + i[4] +'</b> ' + objex + ' | Initial Values:\n' + str(i[0]) + '*earths mass\n' + str(round(i[2], 2)) + ' m/s velocity\n' + str(i[3]) + '*astronomical unit, \noriginal distance to star</div>\n'
                     choose_s.selected= "none"
-                    print(scene.camera.pos)
                 else:
-                    obj_t.text =  '\n<div id="data">' + '<b>' + i[4] +'</b> ' + objex + ' | Initial Values:\n' + str(i[0]) + '*earths mass\n' + str(round(i[2], 2)) + ' m/s velocity\n' + str(i[3]) + '*astronomical unit, \noriginal distance to star</div>\n'
                     choose_s.selected= "none"
-                    print(scene.camera.pos)
     if m.selected == "none":
         for x in labels:
             x.linewidth = 1
@@ -359,10 +322,6 @@ for z in stars_spec:
     lip_s.append(z[5])
 def M_S(m):
     global selected
-    objex = '<span style="color: black;">(Destroyed)</span>'
-    for s in stars:
-        if s.name == m.selected:
-            objex = '<span style="color: green;">(Present)</span>'
     for i in stars_spec:
         if i[5] == m.selected:
             for u in labels:
@@ -374,10 +333,8 @@ def M_S(m):
                     ii.linewidth = 4
                     scene.center = ii.pos
                     selected=i[5]
-                    obj_t.text =  '\n<div id="data">' + '<b>' + i[5] +'</b> ' + objex + ' | Initial Values:\n' + str(i[0]) + '*suns mass\n' + str(round(i[2], 2)) + ' m/s velocity\n' + str(i[3]) + '*astronomical unit, \ndistance to 0-point \nof coordinate system.</div>\n'
                     choose_p.selected = "none"
                 else:
-                    obj_t.text =  '\n<div id="data">' + '<b>' + i[5] +'</b> ' + objex + ' | Initial Values:\n' + str(i[0]) + '*suns mass\n' + str(round(i[2], 2)) + ' m/s velocity\n' + str(i[3]) + '*astronomical unit, \ndistance to 0-point \nof coordinate system.</div>\n'
                     choose_p.selected = "none"
     if m.selected == "none":
         for x in labels:
@@ -508,8 +465,8 @@ def B_stop_trails(b):
         for x in trails:
             x.start()
 checkbox( bind=B_stop_trails, text='Trails: True', pos=scene.title_anchor )
-    
-obj_t = wtext(text="\n\nSandboxmode Settings:\n\n", pos=scene.title_anchor)
+
+obj_sm = wtext(text="\n\nSandboxmode Settings:\n\n", pos=scene.title_anchor)
 
 sandbox_mode = False
 sandbox_mode_timer = 0
@@ -565,23 +522,19 @@ def sandbox_modef(b):
         testarrows.append(pointerz)
 checkbox( bind=sandbox_modef, text='Sandboxmode: Off', pos=scene.title_anchor )
 
-graph_plot = graph(scroll=True, fast=False, xmin=0, xmax=1, title=selected, xtitle="Time [s]", ytitle="Velocity [m/s]", width=16*40, height=9*25)
+graph_plot = graph(scroll=True, fast=False, xmin=0, xmax=1, title=str(selected), xtitle="Time [s]", ytitle="Velocity [m/s]", width=16*40, height=9*25)
 plot_s = gcurve(label="Velocity", color=color.red)
 
 drag = False
 s = None # declare s to be used below
 int_var = 0
 def down():
-    global s, drag
+    global s, drag, selected
     if clickaction == True:
         for label1 in labels:
             planet_i = labels.index(label1)
             planet_obj = planets[planet_i]
             planet_click_obj = click_obj_planets[planet_i]
-            try:
-                yy = planet_spec[planet_i]
-            except:
-                yy = "Unknown"
             obj = scene.mouse.pick
             if (obj == planet_click_obj): #mag(planet_obj.pos - evt.pos) < planet_obj.radius**1.15:
                 for ii in labels_s:
@@ -590,27 +543,14 @@ def down():
                     iii.linewidth = 1
                 label1.line = False
                 label1.linewidth = 4
-                objex = '<span style="color: black;">(Destroyed)</span>'
-                if yy == "undefined":
-                    if "asteroid" in planet_obj.belonging:
-                        for p in planets:
-                            if p.belonging == label1.text:
-                                objex = '<span style="color: green;">(Present)</span>'
-                        choose_s.selected = "none"
-                        choose_p.selected = "none"
-                        selected=planet_obj.belonging
-                        s = planet_obj
-                        obj_t.text = '\n<div id="data">' + '<b>Asteroid</b> ' + objex + ' | Values:\n' + str((planet_obj.mass/me)) + '*me kg\n' + str(round(mag(planet_obj.momentum/planet_obj.mass),1)) + ' m/s\nBelongs to: ' + planet_obj.belonging_system + '</div> \n'
+                if "asteroid" in planet_obj.name:
+                    choose_s.selected = "none"
+                    choose_p.selected = "none"
+                    selected=planet_obj.name
                 else:
-                    for p in planets:
-                        if p.name == label1.text:
-                            objex = '<span style="color: green;">(Present)</span>'
                     choose_s.selected = "none"
                     choose_p.selected = label1.text
                     selected=planet_obj.name
-                    s = planet_obj
-                    scene.camera.pos = planet_obj.pos + vector(au,0,0)
-                    obj_t.text =  '\n<div id="data">' + '<b>' + planet_obj.name +'</b> ' + objex + ' | Values:\n' + str((planet_obj.mass/me)) + '*me kg\n' + str(round(mag(planet_obj.momentum/planet_obj.mass),1)) + ' m/s velocity\n' + str(yy[3]) + '*au, original distance to star\n' + str((planet_obj.mass*1000)/(3.14159265359*((planet_obj.original_radius*100000)**3)*(4/3))) + ' g/cm&#179</div>\n'
     else:
         # give asteroid a belonging system by finding the nearest star
         distances=[]
@@ -631,7 +571,7 @@ def down():
         global asteroid_momentum
         print(asteroid_momentum)
         global asteroid_mass
-        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=asteroid_momentum, belonging="asteroid"+str(int_var), belonging_system=system, name="asteroid"+str(int))
+        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=asteroid_momentum, belonging="asteroid"+str(int_var), belonging_system=system, name="asteroid"+str(int_var), heat_capacity=specific_heat_graphite, temp=200)
         label_ps = label(pos=as_planet.pos, text="asteroid"+str(int_var), xoffset=20, yoffset=12, space=as_planet.radius, height=10, border=6, font="sans", belonging=system )
         planet_click = sphere(  pos=as_planet.pos, radius=16*as_planet.radius, color=color.white, opacity=0.1, belonging=as_planet.belonging, belonging_system=system )
         label_ps.line = False
@@ -655,6 +595,8 @@ def up():
 scene.bind("mousedown", down)
 scene.bind("mousemove", move)
 scene.bind("mouseup", up)
+
+obj_t = wtext(text="", pos=scene.title_anchor)
 
 obj_g = wtext(text="\n<div id='test'>Environmental Settings:\n\n", pos=scene.caption_anchor)
 def ev_g(s):
@@ -839,12 +781,14 @@ while (t >-1):#
                 for planet in planets:
                     if planet.name == choose_p.selected:
                         scene.center = planet.pos
-                        plot_s.plot( pos = [t , mag(planet.momentum)] )
+                        plot_s.plot( pos = [t , mag(planet.momentum)/planet.mass] )
                         graph_plot.xmax = t
+                        graph_plot.title=str(selected)
                     elif planet.belonging == selected:
                         scene.center = planet.pos
-                        plot_s.plot( pos = [t , mag(planet.momentum)] )
+                        plot_s.plot( pos = [t , mag(planet.momentum)/planet.mass] )
                         graph_plot.xmax = t
+                        graph_plot.title=str(selected)
                     else:
                         pass
 
@@ -853,17 +797,30 @@ while (t >-1):#
                 for star in stars:
                     if star.name == choose_s.selected:
                         scene.center = star.pos
-                        plot_s.plot( pos = [t , mag(star.momentum)] )
+                        plot_s.plot( pos = [t , mag(star.momentum)/star.mass] )
                         graph_plot.xmax = t
+                        graph_plot.title=str(selected)
                         
         if following == True:
             if choose_s.selected is "none" and choose_p.selected is "none":
                 for planet in planets:
                     if planet.belonging == selected:
                         scene.center = planet.pos
-                        plot_s.plot( pos = [t , mag(planet.momentum)] )
+                        plot_s.plot( pos = [t , mag(planet.momentum)/star.mass] )
                         graph_plot.xmax = t
+                        graph_plot.title=str(selected)
         
+        for i in planets:
+            if i.name == selected:
+                obj_t.text = i.name
+                obj_t.text =  '\n<div id="data">' + '<b>' + i.name +'</b> <span style="color: green;">Present</span> | Initial Values:\n' + str(i.mass) + '*earths mass\n' + str(round(mag(i.momentum)/i.mass, 2)) + ' m/s velocity\n' + str(i.temp) + 'K average teperature</div>' 
+        for i in stars:
+            if i.name == selected:
+                obj_t.text = i.name
+                obj_t.text =  '\n<div id="data">' + '<b>' + i.name +'</b> <span style="color: green;">Present</span> | Initial Values:\n' + str(i.mass) + '*suns mass\n' + str(round(mag(i.momentum)/i.mass, 2)) + ' m/s velocity\n'  + str(i.temp) + 'K average teperature</div>' 
+        if selected == "none":
+            obj_t.text =  '\n<div id="data"><span style="color: red;">Object Destroyed</span></div>'
+
         if t == 60*5:
             scene.autoscale = False
         t += dt
