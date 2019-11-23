@@ -267,15 +267,15 @@ def create_scene():
         trails.append(trail)
         stars.append(star)
         #lights.append(lamp)
-    #for i in systems_list:
-    #    x = i[-1]
-    #    ra = x[3]*2
-    #    for star in stars_spec:
-    #        if x[-1] == star[4]:
-    #            pos_sys = star[2]
-    #            belonging_s = star[4]
-    #    scale_obj = sphere( pos=vector(0,pos_sys,0), radius=ra*au, color=color.white, make_trail=False, opacity = 0.2, visible=False, belonging=belonging_s )
-    #    systems_scale.append(scale_obj)
+    for i in systems_list:
+        x = i[-1]
+        ra = x[3]*2
+        for star in stars_spec:
+            if x[5] == star[4]:
+                pos_sys = star[2]
+                belonging_s = star[4]
+        scale_obj = sphere( pos=vector(0,pos_sys,0), radius=ra*au, color=color.white, make_trail=False, opacity = 0.2, visible=False, belonging=belonging_s )
+        systems_scale.append(scale_obj)
 
     for l in labels:
         l.line = False
@@ -399,7 +399,7 @@ def B_clickaction(b):
 obj = scene.mouse.pick
 
 button( bind=B_clickaction, text='<img src="https://www.materialui.co/materialIcons/av/library_add_black_24x24.png"> OnClick Action: Asteroid creation', pos=scene.title_anchor )
-scene.append_to_title('\n\n')
+asteroid_density_text =  wtext(text='\n\nRadius: Earths Radius (6371 km)\nDensity: ' + str(round(((asteroid_mass*me)/((4/3)*pi*((er*1000)**3)))/1000, 2)) + ' g/cm3\n', pos=scene.title_anchor)
 
 def asteroid_momentum_func(s):
     global asteroid_momentum
@@ -569,9 +569,9 @@ def down():
         global int_var
         loc = scene.mouse.pos
         global asteroid_momentum
-        print(asteroid_momentum)
         global asteroid_mass
-        as_planet = sphere(pos=loc, radius=54179000, color=color.white, mass=asteroid_mass*me, momentum=asteroid_momentum, belonging="asteroid"+str(int_var), belonging_system=system, name="asteroid"+str(int_var), heat_capacity=specific_heat_graphite, temp=200)
+
+        as_planet = sphere(pos=loc, radius=er*1000, color=color.white, mass=asteroid_mass*me, momentum=asteroid_momentum, belonging="asteroid"+str(int_var), belonging_system=system, name="asteroid"+str(int_var), heat_capacity=specific_heat_graphite, temp=200)
         label_ps = label(pos=as_planet.pos, text="asteroid"+str(int_var), xoffset=20, yoffset=12, space=as_planet.radius, height=10, border=6, font="sans", belonging=system )
         planet_click = sphere(  pos=as_planet.pos, radius=16*as_planet.radius, color=color.white, opacity=0.1, belonging=as_planet.belonging, belonging_system=system )
         label_ps.line = False
@@ -813,13 +813,20 @@ while (t >-1):#
         for i in planets:
             if i.name == selected:
                 obj_t.text = i.name
-                obj_t.text =  '\n<div id="data">' + '<b>' + i.name +'</b> <span style="color: green;">Present</span> | Initial Values:\n' + str(i.mass) + '*earths mass\n' + str(round(mag(i.momentum)/i.mass, 2)) + ' m/s velocity\n' + str(i.temp) + 'K average teperature</div>' 
+                obj_t.text =  '\n<div id="data">' + '<b>' + i.name +'</b> <span style="color: green;">Present</span> | Values:\n' + str(round(i.mass/me, 2)) + '*earths mass\n' + str(round(mag(i.momentum)/i.mass, 2)) + ' m/s velocity\n' + str(i.temp) + 'K average teperature (' + str(round(i.temp-273.15, 1)) + ' °C)\n' + str(round((i.mass/((4/3)*pi*(i.radius**3)))/1000, 2)) + ' g/cm3 (average density)</div>' 
+                asteroid_momentum = (i.momentum/i.mass)*(asteroid_mass*me)
+                asteroid_momentum_winput.disabled=True
         for i in stars:
             if i.name == selected:
                 obj_t.text = i.name
-                obj_t.text =  '\n<div id="data">' + '<b>' + i.name +'</b> <span style="color: green;">Present</span> | Initial Values:\n' + str(i.mass) + '*suns mass\n' + str(round(mag(i.momentum)/i.mass, 2)) + ' m/s velocity\n'  + str(i.temp) + 'K average teperature</div>' 
+                obj_t.text =  '\n<div id="data">' + '<b>' + i.name +'</b> <span style="color: green;">Present</span> | Values:\n' + str(round(i.mass/ms, 2)) + '*suns mass\n' + str(round(mag(i.momentum)/i.mass, 2)) + ' m/s velocity\n'  + str(i.temp) + 'K average teperature (' + str(round(i.temp-273.15, 1)) + ' °C)\n' + str(round((i.mass/((4/3)*pi*(i.radius**3)))/1000, 2)) + ' g/cm3 (average density)</div>' 
+                asteroid_momentum = (i.momentum/i.mass)*(asteroid_mass*me)
+                asteroid_momentum_winput.disabled=True
         if selected == "none":
             obj_t.text =  '\n<div id="data"><span style="color: red;">Object Destroyed</span></div>'
+            asteroid_momentum_winput.disabled=False
+        
+        asteroid_density_text.text = '\n\nRadius: Earths Radius (6371 km)\nDensity: ' + str(round(((asteroid_mass*me)/((4/3)*pi*((er*1000)**3)))/1000, 2)) + ' g/cm3\n'
 
         if t == 60*5:
             scene.autoscale = False
