@@ -42,7 +42,7 @@ kepler11_star = [[0.95,1.10*sr,0,35,"kepler11","kepler-11",35,1.045]]
 
 # [[mass(kg), radius(km), speed(m/s), pos(au), name(planet), name(planet system to which it belongs)]]
 trappist1 = [[0.97,6371,82854,0.0115,"a","trappist1"],[1.16,6371,71029,0.0158,"b","trappist1"],[0.3,6371,59902,0.0223,"c","trappist1"],[0.7,6371,45478,0.0293,"d","trappist1"],[0.93,6371,(2*3.14159265359*(0.0385*au))/(86400*9.21),0.0385,"e","trappist1"],[1.51,6371,(2*3.14*(0.0469*au))/(86400*12.35),0.0469,"f","trappist1"],[0.33,6371,(2*3.141592653594*(0.0619*au))/(86400*18.77),0.0619,"g","trappist1"]]
-solar_system_planets = [[0.055,2439.7,47360,0.387099273,"mercury","solar_system",(specific_heat_iron+specific_heat_oxygen+specific_heat_natrium)/3,["iron", "oxygen", "natrium"],700],[0.815,6051.8,35020,0.723,"venus","solar_system"],[1.0,6371,29722,1.0,"earth","solar_system",(specific_heat_oxygen+specific_heat_silicon)/2,["oxygen","silicon"],288],[0.01,1737.1,29722+1021.9334,1.0+0.00257356604,"earth - moon","solar_system"],[0.107,3389.5,24130,1.524,"mars","solar_system"],[318,69911,13070,5.203,"jupiter","solar_system"],[95.16,58232,9690,9.5,"saturn","solar_system"],[14.54,25362,6810,19.2,"uranus","solar_system"],[17.15,24622,5430,30.1,"neptun","solar_system"]]
+solar_system_planets = [[0.055,2439.7,47360,0.387099273,"mercury","solar_system",(specific_heat_iron+specific_heat_oxygen+specific_heat_natrium)/3,["iron", "oxygen", "natrium"],700],[0.815,6051.8,35020,0.723,"venus","solar_system"],[1.0,6371,29722,1.0,"earth","solar_system",(specific_heat_oxygen+specific_heat_silicon)/2,["oxygen","silicon"],288,"textures/earth.jpg"],[0.01,1737.1,29722+1021.9334,1.0+0.00257356604,"earth - moon","solar_system"],[0.107,3389.5,24130,1.524,"mars","solar_system"],[318,69911,13070,5.203,"jupiter","solar_system"],[95.16,58232,9690,9.5,"saturn","solar_system"],[14.54,25362,6810,19.2,"uranus","solar_system"],[17.15,24622,5430,30.1,"neptun","solar_system"]]
 solar_system_sattelites = [[0.01230,6371/4,29722,1.00257,"erde_mond1","solar_system"]]
 kepler11 = [[4.3,1.97*er,(2*3.141592653594*(0.091*au))/(86400*10.30),0.091,"b","kepler11"],[13.5,3.15*er,(2*3.141592653594*(0.106*au))/(86400*13.02),0.106,"c","kepler11"],[6.1,3.43*er,(2*3.141592653594*(0.159*au))/(86400*22.68),0.159,"d","kepler11"],[8.4,4.52*er,(2*3.141592653594*(0.1949*au))/(86400*31.99598),0.1949,"e","kepler11"],[2.34,2.612*er,(2*3.141592653594*(0.259*au))/(86400*46.688768),0.259,"f","kepler11"]]
 
@@ -184,7 +184,7 @@ def chz(p1,sun):
     elif (sun.radius + (au*1*sqrt((sun.lightforce)/sl))) < r_mag < (sun.radius + (au*2.1*sqrt((sun.lightforce)/sl))):
         p1.color = color.cyan
     elif (sun.radius + (au*0.7*sqrt((sun.lightforce)/sl))) < r_mag <= (sun.radius + (au*1*sqrt((sun.lightforce)/sl))):
-        p1.color = color.green
+        pass#p1.color = color.green
     elif r_mag < (sun.radius + (au*0.7*sqrt((sun.lightforce)/sl))):
         p1.color = color.orange
     else:
@@ -220,12 +220,17 @@ def create_scene():
         else:
             p_r = (ps[1]/20)*radius_star
         
+        #help functions because lists are not fully defined
         if len(ps)<9:
             ps.append(specific_heat_oxygen)
             ps.append("oxygen")
             ps.append(200)
+        
+        if len(ps)<10:
+            planet = sphere( pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1], heat_capacity=ps[6], composition=ps[7], temp=ps[8] )
+        else:     
+            planet = sphere( pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1], heat_capacity=ps[6], composition=ps[7], temp=ps[8], texture=ps[9] )
 
-        planet = sphere( pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1], heat_capacity=ps[6], composition=ps[7], temp=ps[8] )
         trail = attach_trail(planet, radius=planet.radius*30, color=color.white, retain=1000 )
         label_ps = label(pos=planet.pos, text=ps[4], xoffset=20, yoffset=12, space=planet.radius, height=10, border=6, font="sans", belonging=ps[5], original_name = ps[4])
         planet_click = sphere(  pos=planet.pos, radius=6*planet.radius, color=color.white, opacity=0.05, belonging=ps[4], belonging_system=ps[5] )
