@@ -222,7 +222,6 @@ click_obj_planets=[]
 trails=[]
 #currently selected object
 selected="none selected"
-
 def create_scene():
     #Planet creation
     for ps in planet_spec:
@@ -242,9 +241,9 @@ def create_scene():
             ps.append(200)
         
         if len(ps)<10:
-            planet = sphere( pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1], heat_capacity=ps[6], composition=ps[7], temp=ps[8], radians=ps[10] )
+            planet = sphere( shininess=0, emissive=0, pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1], heat_capacity=ps[6], composition=ps[7], temp=ps[8], radians=ps[10] )
         else:     
-            planet = sphere( pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1], heat_capacity=ps[6], composition=ps[7], temp=ps[8], radians=ps[10], texture=ps[9] )
+            planet = sphere( shininess=0, emissive=0, pos=vector((scale + ps[3])*au,0,0), radius=p_r, color=color.white, mass = ps[0]*me, momentum=vector(0,0,-ps[2]*ps[0]*me), make_trail=False, belonging=ps[5], name=ps[4], pickable=True, original_radius=ps[1], heat_capacity=ps[6], composition=ps[7], temp=ps[8], radians=ps[10], texture=ps[9] )
 
         trail = attach_trail(planet, radius=planet.radius*30, color=color.white, retain=1000 )
         label_ps = label(pos=planet.pos, text=ps[4], xoffset=20, yoffset=12, space=planet.radius, height=10, border=6, font="sans", belonging=ps[5], original_name = ps[4])
@@ -271,7 +270,7 @@ def create_scene():
         #else:
             #s_r = (dist/20)
 
-        star = sphere( pos=vector(s[3]*au,0,0), radius=s_r, color=color.yellow, mass = s[0]*ms, momentum=vector(0,0,-s[2]*s[0]*ms), make_trail=False, belonging = s[4], lightforce = s[7], name=s[5], pickable=True, original_radius=s[1], heat_capacity=s[8], temp=s[9], texture=s[10], radians=s[11] )
+        star = sphere( shininess=1, emissive=1, pos=vector(s[3]*au,0,0), radius=s_r, color=color.yellow, mass = s[0]*ms, momentum=vector(0,0,-s[2]*s[0]*ms), make_trail=False, belonging = s[4], lightforce = s[7], name=s[5], pickable=True, original_radius=s[1], heat_capacity=s[8], temp=s[9], texture=s[10], radians=s[11] )
         trail = attach_trail(star, radius=(s_r/2), color=color.white )
         #lamp = local_light(pos=star.pos, color=color.yellow, belonging = s[4])
         label_star = label(pos=star.pos, text=s[5], xoffset=20, yoffset=12, space=star.radius, height=10, border=6, font="sans", belonging = s[4], original_name = s[5])
@@ -365,10 +364,10 @@ def S(s):
     global dt
     global n
     dt = s.value
-    wt.text = str(round((dt/60)*2, 2)) + " minutes/second scaling.\n"
+    wt.text = str((dt*r)/60/60/24) + " days/second scaling.\n"
     n = 1
 slider( bind=S, min=60*2, max=60*200*2, value=60*10*2, pos=scene.title_anchor, length=200)
-wt = wtext(text=str(round((dt/60)*2, 2)) + " minutes/second scaling.\n", pos=scene.title_anchor)
+wt = wtext(text=str((dt*r)/60/60/24) + " days/second scaling.\n", pos=scene.title_anchor)
 
 n = 1
 def B_faster(b):
@@ -440,17 +439,18 @@ def B_clear_trails(b):
 button( bind=B_clear_trails, text='<img src="https://www.materialui.co/materialIcons/action/highlight_off_black_24x24.png"> Clear all trails', pos=scene.title_anchor )
 scene.append_to_title('\n')
 
-better_view = False
-def B_better_view(b):
-    global better_view
-    if better_view == False:
-        b.text = '<img src="https://www.materialui.co/materialIcons/image/camera_black_24x24.png"> Better view (of solar systems)'
-        better_view = True
-        return
-    else:
-        b.text = '<img src="https://www.materialui.co/materialIcons/image/camera_grey_24x24.png"> Normal view'
-        better_view = False
-button( bind=B_better_view, text='<img src="https://www.materialui.co/materialIcons/image/camera_grey_24x24.png"> Normal view', pos=scene.title_anchor )
+#too much for interface, always true
+better_view = True
+#def B_better_view(b):
+#    global better_view
+#    if better_view == False:
+#        b.text = '<img src="https://www.materialui.co/materialIcons/image/camera_black_24x24.png"> Better view (of solar systems)'
+#        better_view = True
+#        return
+#    else:
+#        b.text = '<img src="https://www.materialui.co/materialIcons/image/camera_grey_24x24.png"> Normal view'
+#        better_view = False
+#button( bind=B_better_view, text='<img src="https://www.materialui.co/materialIcons/image/camera_grey_24x24.png"> Normal view', pos=scene.title_anchor )
 
 following = True
 scene.append_to_title('\n')
@@ -542,10 +542,10 @@ graph_plot = graph(scroll=True, fast=False, xmin=0, xmax=1, title=str(selected),
 plot_s = gcurve(label="Velocity", color=color.red)
 
 drag = False
-s = None # declare s to be used below
+s_obj = None # declare s to be used below
 int_var = 0
 def down():
-    global s, drag, selected
+    global s_obj, drag, selected
     if clickaction == True:
         for label1 in labels:
             planet_i = labels.index(label1)
@@ -595,17 +595,17 @@ def down():
         planets.append(as_planet)
         labels.append(label_ps)
         int_var += 1
-        s = as_planet
+        s_obj = as_planet
     drag = True
 
 def move():
-    global drag, s
+    global drag, s_obj
     if drag: # mouse button is down
-        s.pos = scene.mouse.pos
+        s_obj.pos = scene.mouse.pos
 
 def up():
-    global drag, s
-    s.color = color.cyan
+    global drag, s_obj
+    s_obj.color = color.cyan
     drag = False
 
 scene.bind("mousedown", down)
@@ -858,6 +858,15 @@ while (t >-1):#
             else:
                 radians_var = 360*(dt/60/60/s.radians)
                 s.rotate(angle = radians(radians_var), axis = vec(0, 1, 0))
+        
+        for p in planets:
+            velocity_p = mag(p.momentum)/p.mass
+            if velocity_p > 299792458:
+                velocity_p = 299792457
+        for s in stars:
+            velocity = mag(s.momentum)/s.mass
+            if velocity > 299792458:
+                velocity = 299792457
 
         if t == 60*5:
             scene.autoscale = False
