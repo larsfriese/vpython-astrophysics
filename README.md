@@ -12,4 +12,4 @@ Already working versions can be found on my website (Live Demo):
 
 ### Goal
 
-All the modules should be able to work together and act as an fully functional astronomy simulator.
+All the modules should be able to work together and act as an fully functional "universe simulator".
