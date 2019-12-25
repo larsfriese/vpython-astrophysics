@@ -5,7 +5,7 @@ Already working versions can be found on my website (Live Demo):
 - [Planetary simulator](https://bloglink.eu/sim/universe)
 - [Sun simulator](https://bloglink.eu/sim/sun)
 
-<br>[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://shields.io/)
+[![Website shields.io](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://shields.io/)
 
 ### Description of individual modules
 
