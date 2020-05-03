@@ -1,0 +1,1932 @@
+<html>
+<head>
+  <title>vpython-astrophysics</title>
+</head>
+<body>
+<div id="glowscript" class="glowscript">
+<div class="version">Version 0.6 (Alpha)<br>Performance depends on system.<br>(30 fps)</div>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="modified_jquery-ui.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" />
+<link type="text/css" href="https://s3.amazonaws.com/glowscript/css/ide.css" rel="stylesheet" />
+<script type="text/javascript" src="https://s3.amazonaws.com/glowscript/lib/jquery/2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://s3.amazonaws.com/glowscript/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+<script type="text/javascript" src="https://s3.amazonaws.com/glowscript/package/glow.2.8.min.js"></script>
+<script type="text/javascript" src="https://s3.amazonaws.com/glowscript/package/RSrun.2.8.min.js"></script>
+<script type="text/javascript"><!--//--><![CDATA[//><!--
+
+// START JAVASCRIPT
+;(function() {"use strict";
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var regeneratorRuntime = typeof srequire === 'function' ? srequire("streamline-runtime/lib/callbacks/regenerator") : Streamline.srequire("streamline-runtime/lib/callbacks/regenerator");
+
+var _streamline = typeof srequire === 'function' ? srequire("streamline-runtime/lib/callbacks/runtime") : Streamline.srequire("streamline-runtime/lib/callbacks/runtime");
+
+var _filename = "unknown";
+
+var main = _streamline.async(regeneratorRuntime.mark(function _$$main$$(_2) {
+    var gforce, collision_tf, collision, chz, create_scene, M, M_S, S, B_faster, B, B_clickaction, asteroid_momentum_func, asteroid_mass_func, B_clear_trails, B_following, B_stop_trails, sandbox_modef, down, move, up, ev_g, version, box, sphere, simple_sphere, cylinder, pyramid, cone, helix, ellipsoid, ring, arrow, compound, display, vector, print, type, scene, RS_ls, e_graph, G, au, ms, me, sl, sr, er, specific_heat_oxygen, specific_heat_iron, specific_heat_silicon, specific_heat_natrium, specific_heat_graphite, specific_heat_helium, specific_heat_hydrogen, dt, t, t_real, r, programm_running, click_objects_visible, real_values_visuals, asteroid_mass, asteroid_momentum, habitable_zone, sun, trappist1_star, kepler11_star, trappist1, solar_system_planets, solar_system_sattelites, kepler11, stars_spec, planet_spec, systems_list, systems_strings, stars, planets, labels, lights, labels_s, systems_scale, click_obj_planets, trails, selected, lip, i, z, choose_p, lip_s, choose_s, wt, n, wt2, obj_settings, clickaction, obj, asteroid_density_text, asteroid_momentum_winput, wt_am, asteroid_mass_winput, wt_ama, better_view, following, trails_tf, obj_sm, sandbox_mode, sandbox_mode_timer, testarrows, drag, s_obj, int_var, obj_t, obj_g, sliderg, wt_g, star, planet, x, y, star_pos, star_searched, pos_star_label, f, label_p, l, star_other, planet_other, RS_unpack, p, radians_var, s, __name__, strings, RS_Iter11, RS_Index11, RS_Iter12, RS_Index12, RS_Iter17, RS_Index17, RS_Iter36, RS_Index36, RS_Iter37, RS_Index37, RS_Iter38, RS_Index38, RS_Iter39, RS_Index39, RS_Iter40, RS_Index40, RS_Iter41, RS_Index41, RS_Iter42, RS_Index42, RS_Iter43, RS_Index43, RS_Iter44, RS_Index44, RS_Iter45, RS_Index45, RS_Iter46, RS_Index46, RS_Iter47, RS_Index47, RS_Iter48, RS_Index48, RS_Iter49, RS_Index49, RS_Iter50, RS_Index50, RS_Iter51, RS_Index51, RS_Iter52, RS_Index52, RS_Iter53, RS_Index53, RS_Iter54, RS_Index54, RS_Iter55, RS_Index55, RS_Iter56, RS_Index56, RS_Iter57, RS_Index57, RS_Iter58, RS_Index58, RS_Iter59, RS_Index59, RS_Iter60, RS_Index60, RS_Iter61, RS_Index61, RS_Iter62, RS_Index62, RS_Iter63, RS_Index63, RS_Iter64, RS_Index64, RS_Iter65, RS_Index65, RS_Iter66, RS_Index66, RS_Iter67, RS_Index67, RS_Iter68, RS_Index68, RS_Iter69, RS_Index69, RS_Iter70, RS_Index70, RS_Iter71, RS_Index71, RS_Iter72, RS_Index72, RS_Iter73, RS_Index73, RS_Iter74, RS_Index74, RS_Iter75, RS_Index75, RS_Iter76, RS_Index76, RS_Iter77, RS_Index77, RS_Iter78, RS_Index78;
+
+    return regeneratorRuntime.wrap(function _$$main$$$(_context) {
+        while (1) {
+            switch (_context.prev = _context.next) {
+                case 0:
+                    gforce = function gforce(p1, p2) {
+                        var RS_ls, r_vec, r_mag, r_hat, force_mag, force_vec1, force_vec;
+                        "98";
+                        r_vec = p1.pos["-"](p2.pos);
+                        "100";
+                        r_mag = mag(r_vec);
+                        "102";
+                        r_hat = r_vec["/"](r_mag);
+                        "104";
+                        force_mag = G["*"](p1.mass)["*"](p2.mass)["/"](GS_power(r_mag, 2));
+                        "106";
+                        force_vec1 = force_mag["-u"]()["*"](r_hat);
+                        "107";
+                        force_vec = force_vec1;
+                        "109";
+                        return force_vec;
+                    };
+
+                    collision_tf = function collision_tf(p1, p2) {
+                        var RS_ls, r_vec, r_mag, bol_var;
+                        "113";
+                        r_vec = p1.pos["-"](p2.pos);
+                        "114";
+                        r_mag = mag(r_vec);
+                        "115";
+                        if (r_mag[">="](p1.radius["+"](p2.radius))) {
+                                "116";
+                                bol_var = false;
+                                "117";
+                            } else {
+                                "118";
+                                bol_var = true;
+                            }
+                        "120";
+                        return bol_var;
+                    };
+
+                    collision = function collision(p1, p2) {
+                        var RS_ls, new_radius, new_mass, new_momentum, energy_scale, mass_scale, velocity_scale, ekin1, ekin2, li, i, li_s, ekin_total, ekin_leftover, temp_change;
+                        "124";
+                        new_radius = p1.radius["+"](p2.radius);
+                        "125";
+                        new_mass = p1.mass["+"](p2.mass);
+                        "126";
+                        new_momentum = p1.momentum["+"](p2.momentum);
+                        "128";
+                        energy_scale = 1["/"](2)["*"](p1.mass)["*"](GS_power(mag(p1.momentum), 2))["/"](1["/"](2)["*"](p2.mass)["*"](GS_power(mag(p2.momentum), 2)));
+                        "129";
+                        mass_scale = p1.mass["/"](p2.mass);
+                        "130";
+                        velocity_scale = mag(p1.momentum["/"](p1.mass))["/"](mag(p2.momentum["/"](p2.mass)));
+                        "131";
+
+                        "133";
+                        ekin1 = 1["/"](2)["*"](p1.mass)["*"](GS_power(mag(p1.momentum["/"](p1.mass)), 2));
+                        "134";
+                        ekin2 = 1["/"](2)["*"](p2.mass)["*"](GS_power(mag(p2.momentum["/"](p2.mass)), 2));
+                        "138";
+                        if (p1.mass[">"](p2.mass)) {
+                                "139";
+                                if (RS_in(p2, planets)) {
+                                        "140";
+                                        li = planets.index(p2);
+                                        "141";
+                                        labels[typeof li === "number" && li["<"](0) ? labels.length["+"](li) : li].visible = false;
+                                        "142";
+                                        RS_delitem(labels, li);
+                                        "143";
+                                        planets.remove(planets[typeof li === "number" && li["<"](0) ? planets.length["+"](li) : li]);
+                                        "144";
+                                        var RS_Iter1 = RS_Iterable(click_obj_planets);
+                                        for (var RS_Index1 = 0; RS_Index1["<"](RS_Iter1.length); RS_Index1++) {
+                                            i = RS_Iter1[RS_Index1];
+                                            "145";
+                                            if (i.belonging === p2.belonging || _typeof(i.belonging) === "object" && RS_equals(i.belonging, p2.belonging) || i.belonging === p2.name || _typeof(i.belonging) === "object" && RS_equals(i.belonging, p2.name)) {
+                                                    "146";
+                                                    click_obj_planets.remove(i);
+                                                    "147";
+                                                    i.visible = false;
+                                                    "148";
+                                                    i = undefined;
+                                                }
+                                        }
+                                    }
+                                "149";
+                                if (RS_in(p2, stars)) {
+                                        "150";
+                                        li_s = stars.index(p2);
+                                        "151";
+                                        labels_s[typeof li_s === "number" && li_s["<"](0) ? labels_s.length["+"](li_s) : li_s].visible = false;
+                                        "152";
+                                        RS_delitem(labels_s, li_s);
+                                        "153";
+                                        stars.remove(stars[typeof li_s === "number" && li_s["<"](0) ? stars.length["+"](li_s) : li_s]);
+                                    }
+                                "154";
+                                p2.visible = false;
+                                "155";
+                                p2 = undefined;
+                                "156";
+                                p1.mass = new_mass;
+                                "157";
+                                p1.radius = new_radius;
+                                "158";
+                                p1.momentum = new_momentum;
+                                "160";
+                                ekin_total = 1["/"](2)["*"](p1.mass)["*"](GS_power(mag(p1.momentum["/"](p1.mass)), 2));
+                                "161";
+                                ekin_leftover = ekin1["+"](ekin2)["-"](ekin_total);
+                                "162";
+                                temp_change = ekin_leftover["/"](p1.mass["*"](p1.heat_capacity));
+                                "163";
+                                p1.temp = p1.temp["+="](temp_change);
+                                "165";
+                                return;
+                                "166";
+                            } else {
+                                "167";
+                                if (RS_in(p1, planets)) {
+                                        "168";
+                                        li = planets.index(p1);
+                                        "169";
+                                        labels[typeof li === "number" && li["<"](0) ? labels.length["+"](li) : li].visible = false;
+                                        "170";
+                                        RS_delitem(labels, li);
+                                        "171";
+                                        planets.remove(planets[typeof li === "number" && li["<"](0) ? planets.length["+"](li) : li]);
+                                        "172";
+                                        var RS_Iter2 = RS_Iterable(click_obj_planets);
+                                        for (var RS_Index2 = 0; RS_Index2["<"](RS_Iter2.length); RS_Index2++) {
+                                            i = RS_Iter2[RS_Index2];
+                                            "173";
+                                            if (i.belonging === p1.belonging || _typeof(i.belonging) === "object" && RS_equals(i.belonging, p1.belonging) || i.belonging === p1.name || _typeof(i.belonging) === "object" && RS_equals(i.belonging, p1.name)) {
+                                                    "174";
+                                                    click_obj_planets.remove(i);
+                                                    "175";
+                                                    i.visible = false;
+                                                    "176";
+                                                    i = undefined;
+                                                }
+                                        }
+                                    }
+                                "177";
+                                if (RS_in(p1, stars)) {
+                                        "178";
+                                        li_s = stars.index(p1);
+                                        "179";
+                                        labels_s[typeof li_s === "number" && li_s["<"](0) ? labels_s.length["+"](li_s) : li_s].visible = false;
+                                        "180";
+                                        RS_delitem(labels_s, li_s);
+                                        "181";
+                                        stars.remove(stars[typeof li_s === "number" && li_s["<"](0) ? stars.length["+"](li_s) : li_s]);
+                                    }
+                                "182";
+                                p1.visible = false;
+                                "183";
+                                p1 = undefined;
+                                "184";
+                                p2.mass = new_mass;
+                                "185";
+                                p2.radius = new_radius;
+                                "186";
+                                p2.momentum = new_momentum;
+                                "188";
+                                ekin_total = 1["/"](2)["*"](p2.mass)["*"](GS_power(mag(p2.momentum["/"](p2.mass)), 2));
+                                "189";
+                                ekin_leftover = ekin1["+"](ekin2)["-"](ekin_total);
+                                "190";
+                                temp_change = ekin_leftover["/"](p2.mass["*"](p2.heat_capacity));
+                                "191";
+                                p2.temp = p2.temp["+="](temp_change);
+                                "193";
+                                return;
+                            }
+                    };
+
+                    chz = function chz(p1, sun) {
+                        var RS_ls, r_vec, r_mag;
+                        "197";
+                        r_vec = p1.pos["-"](sun.pos);
+                        "198";
+                        r_mag = mag(r_vec);
+                        "199";
+                        if (r_mag[">"](sun.radius["+"](au["*"](2.1)["*"](sqrt(sun.lightforce["/"](sl)))))) {
+                                "200";
+                                p1.color = color.blue;
+                                "201";
+                            } else if (sun.radius["+"](au["*"](1)["*"](sqrt(sun.lightforce["/"](sl))))["<"](r_mag) && r_mag["<"](sun.radius["+"](au["*"](2.1)["*"](sqrt(sun.lightforce["/"](sl)))))) {
+                                "202";
+                                p1.color = color.cyan;
+                                "203";
+                            } else if (sun.radius["+"](au["*"](.7)["*"](sqrt(sun.lightforce["/"](sl))))["<"](r_mag) && r_mag["<="](sun.radius["+"](au["*"](1)["*"](sqrt(sun.lightforce["/"](sl)))))) {
+                                "204";
+                                "205";
+                            } else if (r_mag["<"](sun.radius["+"](au["*"](.7)["*"](sqrt(sun.lightforce["/"](sl)))))) {
+                                "206";
+                                p1.color = color.orange;
+                                "207";
+                            } else {
+                                "208";
+                                p1.color = color.red;
+                            }
+                        "210";
+                        return;
+                    };
+
+                    create_scene = function create_scene() {
+                        var RS_ls, scale, radius_star, star, p_r, planet, trail, label_ps, planet_click, ps, dist2, dist, s_r, label_star, s, x, ra, pos_sys, belonging_s, scale_obj, i, l;
+                        "229";
+                        var RS_Iter3 = RS_Iterable(planet_spec);
+                        for (var RS_Index3 = 0; RS_Index3["<"](RS_Iter3.length); RS_Index3++) {
+                            ps = RS_Iter3[RS_Index3];
+                            "230";
+                            var RS_Iter4 = RS_Iterable(stars_spec);
+                            for (var RS_Index4 = 0; RS_Index4["<"](RS_Iter4.length); RS_Index4++) {
+                                star = RS_Iter4[RS_Index4];
+                                "231";
+                                if (star[4] === ps[5] || _typeof(star[4]) === "object" && RS_equals(star[4], ps[5])) {
+                                        "232";
+                                        scale = star[6];
+                                        "233";
+                                        radius_star = star[1];
+                                    }
+                            }
+                            "234";
+                            if (real_values_visuals === true || (typeof real_values_visuals === "undefined" ? "undefined" : _typeof(real_values_visuals)) === "object" && RS_equals(real_values_visuals, true)) {
+                                    "235";
+                                    p_r = ps[1]["*"](1e3);
+                                    "236";
+                                } else {
+                                    "237";
+                                    p_r = ps[1]["/"](20)["*"](radius_star);
+                                }
+                            "240";
+                            if (len(ps)["<"](9)) {
+                                    "241";
+                                    ps.append(specific_heat_oxygen);
+                                    "242";
+                                    ps.append("oxygen");
+                                    "243";
+                                    ps.append(200);
+                                }
+                            "245";
+                            if (len(ps)["<"](10)) {
+                                    "246";
+                                    planet = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({ shininess: 0, emissive: 0, pos: vector(scale["+"](ps[3])["*"](au), 0, 0), radius: p_r, color: color.white, mass: ps[0]["*"](me), momentum: vector(0, 0, ps[2]["-u"]()["*"](ps[0])["*"](me)), make_trail: false, belonging: ps[5], name: ps[4], pickable: true, original_radius: ps[1], heat_capacity: ps[6], composition: ps[7], temp: ps[8], radians: ps[10] })]);
+                                    "247";
+                                } else {
+                                    "248";
+                                    planet = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({ shininess: 0, emissive: 0, pos: vector(scale["+"](ps[3])["*"](au), 0, 0), radius: p_r, color: color.white, mass: ps[0]["*"](me), momentum: vector(0, 0, ps[2]["-u"]()["*"](ps[0])["*"](me)), make_trail: false, belonging: ps[5], name: ps[4], pickable: true, original_radius: ps[1], heat_capacity: ps[6], composition: ps[7], temp: ps[8], radians: ps[10], texture: ps[9] })]);
+                                }
+                            "250";
+                            trail = RS_interpolate_kwargs.call(this, attach_trail, [planet].concat([RS_desugar_kwargs({ radius: planet.radius["*"](30), color: color.white, retain: 1e3 })]));
+                            "251";
+                            label_ps = RS_interpolate_kwargs.call(this, label, [RS_desugar_kwargs({ pos: planet.pos, text: ps[4], xoffset: 20, yoffset: 12, space: planet.radius, height: 10, border: 6, font: "sans", belonging: ps[5], original_name: ps[4] })]);
+                            "252";
+                            planet_click = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({ pos: planet.pos, radius: 6["*"](planet.radius), color: color.white, opacity: .05, belonging: ps[4], belonging_system: ps[5] })]);
+                            "253";
+                            click_obj_planets.append(planet_click);
+                            "254";
+                            trails.append(trail);
+                            "255";
+                            labels.append(label_ps);
+                            "256";
+                            planets.append(planet);
+                        }
+                        "259";
+                        var RS_Iter5 = RS_Iterable(stars_spec);
+                        for (var RS_Index5 = 0; RS_Index5["<"](RS_Iter5.length); RS_Index5++) {
+                            s = RS_Iter5[RS_Index5];
+                            "260";
+                            dist2 = 0;
+                            "261";
+                            var RS_Iter6 = RS_Iterable(planet_spec);
+                            for (var RS_Index6 = 0; RS_Index6["<"](RS_Iter6.length); RS_Index6++) {
+                                planet = RS_Iter6[RS_Index6];
+                                "262";
+                                if (planet[5] === s[4] || _typeof(planet[5]) === "object" && RS_equals(planet[5], s[4])) {
+                                        "263";
+                                        if (dist2[">"](planet[3])) {
+                                                "264";
+                                                "265";
+                                            } else {
+                                                "266";
+                                                dist2 = planet[3];
+                                            }
+                                    }
+                            }
+                            "267";
+                            dist = dist2["*"](au);
+                            "269";
+                            s_r = real_values_visuals ? s[1]["*"](1e3) : dist["/"](80);
+                            "275";
+                            star = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({ shininess: 1, emissive: 1, pos: vector(s[3]["*"](au), 0, 0), radius: s_r, color: color.yellow, mass: s[0]["*"](ms), momentum: vector(0, 0, s[2]["-u"]()["*"](s[0])["*"](ms)), make_trail: false, belonging: s[4], lightforce: s[7], name: s[5], pickable: true, original_radius: s[1], heat_capacity: s[8], temp: s[9], texture: s[10], radians: s[11] })]);
+                            "276";
+                            trail = RS_interpolate_kwargs.call(this, attach_trail, [star].concat([RS_desugar_kwargs({ radius: s_r["/"](2), color: color.white })]));
+                            "278";
+                            label_star = RS_interpolate_kwargs.call(this, label, [RS_desugar_kwargs({ pos: star.pos, text: s[5], xoffset: 20, yoffset: 12, space: star.radius, height: 10, border: 6, font: "sans", belonging: s[4], original_name: s[5] })]);
+                            "279";
+                            if (RS_in(s[4], systems_strings)) {
+                                    "280";
+                                    "281";
+                                } else {
+                                    "282";
+                                    systems_strings.append(s[4]);
+                                }
+                            "283";
+                            labels_s.append(label_star);
+                            "284";
+                            trails.append(trail);
+                            "285";
+                            stars.append(star);
+                        }
+                        "287";
+                        var RS_Iter7 = RS_Iterable(systems_list);
+                        for (var RS_Index7 = 0; RS_Index7["<"](RS_Iter7.length); RS_Index7++) {
+                            i = RS_Iter7[RS_Index7];
+                            "288";
+                            x = i[i.length["-"](1)];
+                            "289";
+                            ra = x[3]["*"](2);
+                            "290";
+                            var RS_Iter8 = RS_Iterable(stars_spec);
+                            for (var RS_Index8 = 0; RS_Index8["<"](RS_Iter8.length); RS_Index8++) {
+                                star = RS_Iter8[RS_Index8];
+                                "291";
+                                if (x[5] === star[4] || _typeof(x[5]) === "object" && RS_equals(x[5], star[4])) {
+                                        "292";
+                                        pos_sys = star[2];
+                                        "293";
+                                        belonging_s = star[4];
+                                    }
+                            }
+                            "294";
+                            scale_obj = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({ pos: vector(0, pos_sys, 0), radius: ra["*"](au), color: color.white, make_trail: false, opacity: .2, visible: false, belonging: belonging_s })]);
+                            "295";
+                            systems_scale.append(scale_obj);
+                        }
+                        "297";
+                        var RS_Iter9 = RS_Iterable(labels);
+                        for (var RS_Index9 = 0; RS_Index9["<"](RS_Iter9.length); RS_Index9++) {
+                            l = RS_Iter9[RS_Index9];
+                            "298";
+                            l.line = false;
+                        }
+                        "299";
+                        var RS_Iter10 = RS_Iterable(labels_s);
+                        for (var RS_Index10 = 0; RS_Index10["<"](RS_Iter10.length); RS_Index10++) {
+                            l = RS_Iter10[RS_Index10];
+                            "300";
+                            l.line = false;
+                        }
+                    };
+
+                    M = function M(m) {
+                        var RS_ls, u, ii, i, x;
+                        "312";
+                        "313";
+                        var RS_Iter13 = RS_Iterable(planet_spec);
+                        for (var RS_Index13 = 0; RS_Index13["<"](RS_Iter13.length); RS_Index13++) {
+                            i = RS_Iter13[RS_Index13];
+                            "314";
+                            if (i[4] === m.selected || _typeof(i[4]) === "object" && RS_equals(i[4], m.selected)) {
+                                    "316";
+                                    var RS_Iter14 = RS_Iterable(labels_s);
+                                    for (var RS_Index14 = 0; RS_Index14["<"](RS_Iter14.length); RS_Index14++) {
+                                        u = RS_Iter14[RS_Index14];
+                                        "317";
+                                        u.linewidth = 1;
+                                    }
+                                    "319";
+                                    var RS_Iter15 = RS_Iterable(labels);
+                                    for (var RS_Index15 = 0; RS_Index15["<"](RS_Iter15.length); RS_Index15++) {
+                                        ii = RS_Iter15[RS_Index15];
+                                        "320";
+                                        ii.linewidth = 1;
+                                        "322";
+                                        if (ii.text === i[4] || _typeof(ii.text) === "object" && RS_equals(ii.text, i[4])) {
+                                                "323";
+                                                ii.line = false;
+                                                "324";
+                                                ii.linewidth = 4;
+                                                "325";
+                                                scene.center = ii.pos;
+                                                "326";
+                                                selected = i[4];
+                                                "327";
+                                                choose_s.selected = "none";
+                                                "328";
+                                            } else {
+                                                "329";
+                                                choose_s.selected = "none";
+                                            }
+                                    }
+                                }
+                        }
+                        "330";
+                        if (m.selected === "none" || _typeof(m.selected) === "object" && RS_equals(m.selected, "none")) {
+                                "331";
+                                var RS_Iter16 = RS_Iterable(labels);
+                                for (var RS_Index16 = 0; RS_Index16["<"](RS_Iter16.length); RS_Index16++) {
+                                    x = RS_Iter16[RS_Index16];
+                                    "332";
+                                    x.linewidth = 1;
+                                }
+                                "333";
+                                obj_t.text = "\n\n";
+                            }
+                    };
+
+                    M_S = function M_S(m) {
+                        var RS_ls, u, ii, i, x;
+                        "341";
+                        "342";
+                        var RS_Iter18 = RS_Iterable(stars_spec);
+                        for (var RS_Index18 = 0; RS_Index18["<"](RS_Iter18.length); RS_Index18++) {
+                            i = RS_Iter18[RS_Index18];
+                            "343";
+                            if (i[5] === m.selected || _typeof(i[5]) === "object" && RS_equals(i[5], m.selected)) {
+                                    "344";
+                                    var RS_Iter19 = RS_Iterable(labels);
+                                    for (var RS_Index19 = 0; RS_Index19["<"](RS_Iter19.length); RS_Index19++) {
+                                        u = RS_Iter19[RS_Index19];
+                                        "345";
+                                        u.linewidth = 1;
+                                    }
+                                    "346";
+                                    var RS_Iter20 = RS_Iterable(labels_s);
+                                    for (var RS_Index20 = 0; RS_Index20["<"](RS_Iter20.length); RS_Index20++) {
+                                        ii = RS_Iter20[RS_Index20];
+                                        "347";
+                                        ii.linewidth = 1;
+                                        "348";
+                                        if (ii.text === i[5] || _typeof(ii.text) === "object" && RS_equals(ii.text, i[5])) {
+                                                "349";
+                                                ii.line = false;
+                                                "350";
+                                                ii.linewidth = 4;
+                                                "351";
+                                                scene.center = ii.pos;
+                                                "352";
+                                                selected = i[5];
+                                                "353";
+                                                choose_p.selected = "none";
+                                                "354";
+                                            } else {
+                                                "355";
+                                                choose_p.selected = "none";
+                                            }
+                                    }
+                                }
+                        }
+                        "356";
+                        if (m.selected === "none" || _typeof(m.selected) === "object" && RS_equals(m.selected, "none")) {
+                                "357";
+                                var RS_Iter21 = RS_Iterable(labels);
+                                for (var RS_Index21 = 0; RS_Index21["<"](RS_Iter21.length); RS_Index21++) {
+                                    x = RS_Iter21[RS_Index21];
+                                    "358";
+                                    x.linewidth = 1;
+                                }
+                                "359";
+                                obj_t.text = "\n\n";
+                            }
+                    };
+
+                    S = function S(s) {
+                        var RS_ls;
+                        "366";
+                        "367";
+                        "368";
+                        dt = s.value;
+                        "369";
+                        wt.text = str(dt["*"](r)["/"](60)["/"](60)["/"](24))["+"](" days/second scaling.\n");
+                        "370";
+                        n = 1;
+                    };
+
+                    B_faster = function B_faster(b) {
+                        var RS_ls;
+                        "376";
+                        "377";
+                        "378";
+                        dt = dt["+="](60["*"](20)["*"](GS_power(5, n)));
+                        "379";
+                        n = n["+="](1);
+                        "380";
+                        wt.text = str(dt["*"](r)["/"](60)["/"](60)["/"](24))["+"](" days/second scaling.\n");
+                    };
+
+                    B = function B(b) {
+                        var RS_ls;
+                        "384";
+                        "385";
+                        if (programm_running === true || (typeof programm_running === "undefined" ? "undefined" : _typeof(programm_running)) === "object" && RS_equals(programm_running, true)) {
+                                "386";
+                                programm_running = false;
+                                "387";
+                                b.text = "&#9654;";
+                                "388";
+                                return;
+                                "389";
+                            } else {
+                                "390";
+                                programm_running = true;
+                                "391";
+                                b.text = "||";
+                            }
+                    };
+
+                    B_clickaction = function B_clickaction(b) {
+                        var RS_ls;
+                        "400";
+                        "401";
+                        "402";
+                        if (clickaction === true || (typeof clickaction === "undefined" ? "undefined" : _typeof(clickaction)) === "object" && RS_equals(clickaction, true)) {
+                                "403";
+                                clickaction = false;
+                                "404";
+                                click_objects_visible = false;
+                                "405";
+                                b.text = "<img src=\"https://www.materialui.co/materialIcons/av/library_add_black_24x24.png\"> OnClick Action: Asteroid creation";
+                                "406";
+                                asteroid_momentum_winput.disabled = false;
+                                "407";
+                                asteroid_mass_winput.disabled = false;
+                                "408";
+                                return;
+                                "409";
+                            } else {
+                                "410";
+                                clickaction = true;
+                                "411";
+                                b.text = "<img src=\"https://www.materialui.co/materialIcons/action/touch_app_black_24x24.png\"> OnClick Action: Object selection";
+                                "412";
+                                asteroid_momentum_winput.disabled = true;
+                                "413";
+                                asteroid_mass_winput.disabled = true;
+                                "414";
+                                click_objects_visible = true;
+                            }
+                    };
+
+                    asteroid_momentum_func = function asteroid_momentum_func(s) {
+                        var RS_ls;
+                        "422";
+                        "423";
+                        "424";
+                        asteroid_momentum = vector(0, s.number["*"](asteroid_mass)["*"](me), 0);
+                    };
+
+                    asteroid_mass_func = function asteroid_mass_func(s) {
+                        var RS_ls;
+                        "431";
+                        "432";
+                        asteroid_mass = s.number;
+                    };
+
+                    B_clear_trails = function B_clear_trails(b) {
+                        var RS_ls, x;
+                        "439";
+                        var RS_Iter22 = RS_Iterable(trails);
+                        for (var RS_Index22 = 0; RS_Index22["<"](RS_Iter22.length); RS_Index22++) {
+                            x = RS_Iter22[RS_Index22];
+                            "440";
+                            x.clear();
+                        }
+                    };
+
+                    B_following = function B_following(b) {
+                        var RS_ls;
+                        "460";
+                        "461";
+                        if (following === true || (typeof following === "undefined" ? "undefined" : _typeof(following)) === "object" && RS_equals(following, true)) {
+                                "462";
+                                following = false;
+                                "463";
+                                b.text = "Camera not following targets";
+                                "464";
+                                return;
+                                "465";
+                            } else {
+                                "466";
+                                following = true;
+                                "467";
+                                b.text = "Camera following targets";
+                            }
+                    };
+
+                    B_stop_trails = function B_stop_trails(b) {
+                        var RS_ls, x;
+                        "473";
+                        "474";
+                        if (trails_tf === true || (typeof trails_tf === "undefined" ? "undefined" : _typeof(trails_tf)) === "object" && RS_equals(trails_tf, true)) {
+                                "475";
+                                trails_tf = false;
+                                "476";
+                                b.text = "Trails: False";
+                                "477";
+                                var RS_Iter23 = RS_Iterable(trails);
+                                for (var RS_Index23 = 0; RS_Index23["<"](RS_Iter23.length); RS_Index23++) {
+                                    x = RS_Iter23[RS_Index23];
+                                    "478";
+                                    x.stop();
+                                }
+                                "479";
+                                return;
+                                "480";
+                            } else {
+                                "481";
+                                trails_tf = true;
+                                "482";
+                                b.text = "Trails: True";
+                                "483";
+                                var RS_Iter24 = RS_Iterable(trails);
+                                for (var RS_Index24 = 0; RS_Index24["<"](RS_Iter24.length); RS_Index24++) {
+                                    x = RS_Iter24[RS_Index24];
+                                    "484";
+                                    x.start();
+                                }
+                            }
+                    };
+
+                    sandbox_modef = function sandbox_modef(b) {
+                        var RS_ls, i, pointerx, pointery, pointerz;
+                        "493";
+                        "494";
+                        "495";
+                        if (sandbox_mode === true || (typeof sandbox_mode === "undefined" ? "undefined" : _typeof(sandbox_mode)) === "object" && RS_equals(sandbox_mode, true)) {
+                                "496";
+                                sandbox_mode = false;
+                                "498";
+                                scene.camera.pos = scene.camera.pos["+="](vector(0, 17["*"](au), 0));
+                                "499";
+                                scene.camera.axis = scene.camera.axis["+="](vector(0, 17["*"](au["-u"]()), 0));
+                                "500";
+                                b.text = "Sandboxmode: Off";
+                                "501";
+                                create_scene();
+                                "502";
+                                var RS_Iter25 = RS_Iterable(testarrows);
+                                for (var RS_Index25 = 0; RS_Index25["<"](RS_Iter25.length); RS_Index25++) {
+                                    i = RS_Iter25[RS_Index25];
+                                    "503";
+                                    i.visible = false;
+                                    "504";
+                                    i = undefined;
+                                }
+                                "505";
+                                testarrows.clear();
+                                "506";
+                                return;
+                                "507";
+                            } else {
+                                "508";
+                                sandbox_mode = true;
+                                "509";
+                                scene.center = vector(0, 0, 0);
+                                "510";
+                                b.text = "Sandboxmode: On";
+                                "511";
+                                var RS_Iter26 = RS_Iterable(planets);
+                                for (var RS_Index26 = 0; RS_Index26["<"](RS_Iter26.length); RS_Index26++) {
+                                    i = RS_Iter26[RS_Index26];
+                                    "512";
+                                    i.visible = false;
+                                    "513";
+                                    i = undefined;
+                                }
+                                "514";
+                                planets.clear();
+                                "515";
+                                var RS_Iter27 = RS_Iterable(stars);
+                                for (var RS_Index27 = 0; RS_Index27["<"](RS_Iter27.length); RS_Index27++) {
+                                    i = RS_Iter27[RS_Index27];
+                                    "516";
+                                    i.visible = false;
+                                    "517";
+                                    i = undefined;
+                                }
+                                "518";
+                                stars.clear();
+                                "519";
+                                var RS_Iter28 = RS_Iterable(labels);
+                                for (var RS_Index28 = 0; RS_Index28["<"](RS_Iter28.length); RS_Index28++) {
+                                    i = RS_Iter28[RS_Index28];
+                                    "520";
+                                    i.visible = false;
+                                    "521";
+                                    i = undefined;
+                                }
+                                "522";
+                                labels.clear();
+                                "523";
+                                var RS_Iter29 = RS_Iterable(labels_s);
+                                for (var RS_Index29 = 0; RS_Index29["<"](RS_Iter29.length); RS_Index29++) {
+                                    i = RS_Iter29[RS_Index29];
+                                    "524";
+                                    i.visible = false;
+                                    "525";
+                                    i = undefined;
+                                }
+                                "526";
+                                labels_s.clear();
+                                "527";
+                                var RS_Iter30 = RS_Iterable(trails);
+                                for (var RS_Index30 = 0; RS_Index30["<"](RS_Iter30.length); RS_Index30++) {
+                                    i = RS_Iter30[RS_Index30];
+                                    "528";
+                                    i.clear();
+                                    "529";
+                                    i = undefined;
+                                }
+                                "530";
+                                trails.clear();
+                                "531";
+                                var RS_Iter31 = RS_Iterable(click_obj_planets);
+                                for (var RS_Index31 = 0; RS_Index31["<"](RS_Iter31.length); RS_Index31++) {
+                                    i = RS_Iter31[RS_Index31];
+                                    "532";
+                                    i.visible = false;
+                                    "533";
+                                    i = undefined;
+                                }
+                                "534";
+                                click_obj_planets.clear();
+                                "535";
+                                pointerx = RS_interpolate_kwargs.call(this, arrow, [RS_desugar_kwargs({ pos: vector(0, 0, 0), axis: vector(4["*"](au), 0, 0), color: vector(1, 1, 1) })]);
+                                "536";
+                                pointery = RS_interpolate_kwargs.call(this, arrow, [RS_desugar_kwargs({ pos: vector(0, 0, 0), axis: vector(0, 4["*"](au), 0), color: vector(1, 0, 1) })]);
+                                "537";
+                                pointerz = RS_interpolate_kwargs.call(this, arrow, [RS_desugar_kwargs({ pos: vector(0, 0, 0), axis: vector(0, 0, 4["*"](au)), color: vector(0, 1, 1) })]);
+                                "538";
+                                testarrows.append(pointerx);
+                                "539";
+                                testarrows.append(pointery);
+                                "540";
+                                testarrows.append(pointerz);
+                            }
+                    };
+
+                    down = function down() {
+                        var RS_ls, planet_i, planet_obj, planet_click_obj, obj, ii, iii, label1, distances, names, distance, i, index_worth, system, loc, as_planet, label_ps, planet_click;
+                        "547";
+                        "548";
+                        if (clickaction === true || (typeof clickaction === "undefined" ? "undefined" : _typeof(clickaction)) === "object" && RS_equals(clickaction, true)) {
+                                "549";
+                                var RS_Iter32 = RS_Iterable(labels);
+                                for (var RS_Index32 = 0; RS_Index32["<"](RS_Iter32.length); RS_Index32++) {
+                                    label1 = RS_Iter32[RS_Index32];
+                                    "550";
+                                    planet_i = labels.index(label1);
+                                    "551";
+                                    planet_obj = planets[typeof planet_i === "number" && planet_i["<"](0) ? planets.length["+"](planet_i) : planet_i];
+                                    "552";
+                                    planet_click_obj = click_obj_planets[typeof planet_i === "number" && planet_i["<"](0) ? click_obj_planets.length["+"](planet_i) : planet_i];
+                                    "553";
+                                    obj = scene.mouse.pick();
+                                    "554";
+                                    if (obj === planet_click_obj || (typeof obj === "undefined" ? "undefined" : _typeof(obj)) === "object" && RS_equals(obj, planet_click_obj)) {
+                                            "555";
+                                            var RS_Iter33 = RS_Iterable(labels_s);
+                                            for (var RS_Index33 = 0; RS_Index33["<"](RS_Iter33.length); RS_Index33++) {
+                                                ii = RS_Iter33[RS_Index33];
+                                                "556";
+                                                ii.linewidth = 1;
+                                            }
+                                            "557";
+                                            var RS_Iter34 = RS_Iterable(labels);
+                                            for (var RS_Index34 = 0; RS_Index34["<"](RS_Iter34.length); RS_Index34++) {
+                                                iii = RS_Iter34[RS_Index34];
+                                                "558";
+                                                iii.linewidth = 1;
+                                            }
+                                            "559";
+                                            label1.line = false;
+                                            "560";
+                                            label1.linewidth = 4;
+                                            "561";
+                                            if (RS_in("asteroid", planet_obj.name)) {
+                                                    "562";
+                                                    choose_s.selected = "none";
+                                                    "563";
+                                                    choose_p.selected = "none";
+                                                    "564";
+                                                    selected = planet_obj.name;
+                                                    "565";
+                                                } else {
+                                                    "566";
+                                                    choose_s.selected = "none";
+                                                    "567";
+                                                    choose_p.selected = label1.text;
+                                                    "568";
+                                                    selected = planet_obj.name;
+                                                    "569";
+                                                }
+                                        }
+                                }
+                            } else {
+                                "571";
+                                distances = RS_list_decorate([]);
+                                "572";
+                                names = RS_list_decorate([]);
+                                "573";
+                                var RS_Iter35 = RS_Iterable(stars);
+                                for (var RS_Index35 = 0; RS_Index35["<"](RS_Iter35.length); RS_Index35++) {
+                                    i = RS_Iter35[RS_Index35];
+                                    "574";
+                                    distance = i.pos["-"](scene.mouse.pos);
+                                    "575";
+                                    distances.append(mag(distance));
+                                    "576";
+                                    names.append(i.belonging);
+                                }
+                                "577";
+                                try {
+                                    "578";
+                                    index_worth = distances.index(min(distances));
+                                    "579";
+                                    system = names[typeof index_worth === "number" && index_worth["<"](0) ? names.length["+"](index_worth) : index_worth];
+                                    "580";
+                                    if (min(distances)[">"](10["*"](au))) {
+                                            system = "none";
+                                        }
+                                    "581";
+                                } catch (RS_Exception) {
+                                    RS_last_exception = RS_Exception;
+                                    {
+                                        "582";
+                                        system = "none";
+                                    }
+                                }
+                                "584";
+                                "585";
+                                loc = scene.mouse.pos;
+                                "586";
+                                "587";
+                                "589";
+                                as_planet = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({ pos: loc, radius: er["*"](1e3), color: color.white, mass: asteroid_mass["*"](me), momentum: asteroid_momentum, belonging: "asteroid"["+"](str(int_var)), belonging_system: system, name: "asteroid"["+"](str(int_var)), heat_capacity: specific_heat_graphite, temp: 200, radians: "none" })]);
+                                "590";
+                                label_ps = RS_interpolate_kwargs.call(this, label, [RS_desugar_kwargs({ pos: as_planet.pos, text: "asteroid"["+"](str(int_var)), xoffset: 20, yoffset: 12, space: as_planet.radius, height: 10, border: 6, font: "sans", belonging: system })]);
+                                "591";
+                                planet_click = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({ pos: as_planet.pos, radius: 16["*"](as_planet.radius), color: color.white, opacity: .1, belonging: as_planet.belonging, belonging_system: system })]);
+                                "592";
+                                label_ps.line = false;
+                                "593";
+                                click_obj_planets.append(planet_click);
+                                "594";
+                                planets.append(as_planet);
+                                "595";
+                                labels.append(label_ps);
+                                "596";
+                                int_var = int_var["+="](1);
+                                "597";
+                                s_obj = as_planet;
+                            }
+                        "598";
+                        drag = true;
+                    };
+
+                    move = function move() {
+                        var RS_ls;
+                        "601";
+                        "602";
+                        if (drag) {
+                                "603";
+                                s_obj.pos = scene.mouse.pos;
+                            }
+                    };
+
+                    up = function up() {
+                        var RS_ls;
+                        "606";
+                        "607";
+                        s_obj.color = color.cyan;
+                        "608";
+                        drag = false;
+                    };
+
+                    ev_g = function ev_g(s) {
+                        var RS_ls;
+                        "618";
+                        "619";
+                        G = G["*"](s.value);
+                        "620";
+                        wt_g.text = "G: "["+"](str(G))["+"](" m^3/kg*s^2");
+                    };
+
+                    version = RS_list_decorate(["2.8", "glowscript"]);
+                    Array.prototype['+'] = function (r) {
+                        return this.concat(r);
+                    };
+                    Array.prototype['*'] = function (r) {
+                        return __array_times_number(this, r);
+                    };
+                    __name__ = '__main__';
+
+                    window.__GSlang = "vpython";
+                    box = vp_box;
+                    sphere = vp_sphere;
+                    simple_sphere = vp_simple_sphere;
+                    cylinder = vp_cylinder;
+                    pyramid = vp_pyramid;
+                    cone = vp_cone;
+                    helix = vp_helix;
+                    ellipsoid = vp_ellipsoid;
+                    ring = vp_ring;
+                    arrow = vp_arrow;
+                    compound = vp_compound;
+                    display = canvas;
+                    vector = vec;
+                    print = GSprint;
+                    type = pytype;
+                    scene = canvas();
+                    strings = RS_modules.pythonize.strings;
+
+
+                    strings();
+                    "4";
+                    e_graph = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({ color: color.blue })]);
+                    "7";
+                    G = 6.67["*"](GS_power(10, 11["-u"]()));
+                    "8";
+                    au = 149597870700;
+                    "9";
+                    ms = 1.989["*"](GS_power(10, 30));
+                    "10";
+                    me = 5.9722["*"](GS_power(10, 24));
+                    "11";
+                    sl = 1;
+                    "12";
+                    sr = 695510;
+                    "13";
+                    er = 6371;
+                    "14";
+                    specific_heat_oxygen = 919;
+                    "15";
+                    specific_heat_iron = 449;
+                    "16";
+                    specific_heat_silicon = 710;
+                    "17";
+                    specific_heat_natrium = 1260;
+                    "18";
+                    specific_heat_graphite = 717;
+                    "19";
+                    specific_heat_helium = 5192;
+                    "20";
+                    specific_heat_hydrogen = 14300;
+                    "23";
+                    dt = 60["*"](10)["*"](2);
+                    "24";
+                    t = 0;
+                    "25";
+                    t_real = 0;
+                    "26";
+                    r = 30;
+                    "28";
+                    programm_running = true;
+                    "30";
+                    click_objects_visible = false;
+                    "33";
+                    real_values_visuals = true;
+                    "35";
+                    asteroid_mass = .4;
+                    "38";
+                    asteroid_momentum = vector(0, 0, 0);
+                    "40";
+                    habitable_zone = false;
+                    "43";textures
+                    sun = RS_list_decorate([RS_list_decorate([1, sr, 0, 0, "solar_system", "sun", 0, 1, specific_heat_hydrogen, 15e6, "textures/sun.jpg", 1587.28])]);
+                    "44";
+                    trappist1_star = RS_list_decorate([RS_list_decorate([.089, .121["*"](sr), 0, 32, "trappist1", "trappist-1", 32, 5.22["*"](GS_power(10, 4["-u"]()))])]);
+                    "45";
+                    kepler11_star = RS_list_decorate([RS_list_decorate([.95, 1.1["*"](sr), 0, 35, "kepler11", "kepler-11", 35, 1.045])]);
+                    "48";
+                    trappist1 = RS_list_decorate([RS_list_decorate([.97, 6371, 82854, .0115, "a", "trappist1"]), RS_list_decorate([1.16, 6371, 71029, .0158, "b", "trappist1"]), RS_list_decorate([.3, 6371, 59902, .0223, "c", "trappist1"]), RS_list_decorate([.7, 6371, 45478, .0293, "d", "trappist1"]), RS_list_decorate([.93, 6371, 2["*"](3.14159265359)["*"](.0385)["*"](au)["/"](86400["*"](9.21)), .0385, "e", "trappist1"]), RS_list_decorate([1.51, 6371, 2["*"](3.14)["*"](.0469)["*"](au)["/"](86400["*"](12.35)), .0469, "f", "trappist1"]), RS_list_decorate([.33, 6371, 2["*"](3.141592653594)["*"](.0619)["*"](au)["/"](86400["*"](18.77)), .0619, "g", "trappist1"])]);
+                    "50";
+                    solar_system_planets = RS_list_decorate([RS_list_decorate([.055, 2439.7, 47360, .387099273, "mercury", "solar_system", specific_heat_iron["+"](specific_heat_oxygen)["+"](specific_heat_natrium)["/"](3), RS_list_decorate(["iron", "oxygen", "natrium"]), 440, "textures/mercury.jpg", 1407.5]), RS_list_decorate([.815, 6051.8, 35020, .723, "venus", "solar_system", specific_heat_oxygen["+"](specific_heat_graphite)["/"](2), RS_list_decorate(["oxygen", "carbon"]), 737, "textures/venus.jpg", 5832]), RS_list_decorate([1, 6371, 29722, 1, "earth", "solar_system", specific_heat_oxygen["+"](specific_heat_silicon)["/"](2), RS_list_decorate(["oxygen", "silicon"]), 288, "textures/earth.jpg", 24]), RS_list_decorate([.01, 1737.1, 29722["+"](1021.9334), 1["+"](.00257356604), "earth - moon", "solar_system", specific_heat_oxygen["+"](specific_heat_iron)["/"](2), RS_list_decorate(["oxygen", "iron"]), 100, "textures/earth_moon.jpg", 655.2]), RS_list_decorate([.107, 3389.5, 24130, 1.524, "mars", "solar_system", specific_heat_iron["+"](specific_heat_oxygen)["+"](specific_heat_natrium)["/"](3), RS_list_decorate(["iron", "oxygen", "natrium"]), 210, "textures/mars.jpg", 24.5]), RS_list_decorate([318, 69911, 13070, 5.203, "jupiter", "solar_system", specific_heat_helium["+"](specific_heat_hydrogen)["/"](2), RS_list_decorate(["hydrogen", "helium"]), 165, "textures/jupiter.jpg", 9.9]), RS_list_decorate([95.16, 58232, 9690, 9.5, "saturn", "solar_system", specific_heat_helium["+"](specific_heat_hydrogen)["/"](2), RS_list_decorate(["hydrogen", "helium"]), 134, "textures/saturn.jpg", 10.65]), RS_list_decorate([14.54, 25362, 6810, 19.2, "uranus", "solar_system", specific_heat_helium["+"](specific_heat_hydrogen)["/"](2), RS_list_decorate(["hydrogen", "helium"]), 76, "textures/uranus.jpg", 17.2]), RS_list_decorate([17.15, 24622, 5430, 30.1, "neptun", "solar_system", specific_heat_helium["+"](specific_heat_hydrogen)["/"](2), RS_list_decorate(["hydrogen", "helium"]), 72, "textures/neptune.jpg", 16.11])]);
+                    "61";
+                    solar_system_sattelites = RS_list_decorate([RS_list_decorate([.0123, 6371["/"](4), 29722, 1.00257, "erde_mond1", "solar_system"])]);
+                    "62";
+                    kepler11 = RS_list_decorate([RS_list_decorate([4.3, 1.97["*"](er), 2["*"](3.141592653594)["*"](.091)["*"](au)["/"](86400["*"](10.3)), .091, "b", "kepler11"]), RS_list_decorate([13.5, 3.15["*"](er), 2["*"](3.141592653594)["*"](.106)["*"](au)["/"](86400["*"](13.02)), .106, "c", "kepler11"]), RS_list_decorate([6.1, 3.43["*"](er), 2["*"](3.141592653594)["*"](.159)["*"](au)["/"](86400["*"](22.68)), .159, "d", "kepler11"]), RS_list_decorate([8.4, 4.52["*"](er), 2["*"](3.141592653594)["*"](.1949)["*"](au)["/"](86400["*"](31.99598)), .1949, "e", "kepler11"]), RS_list_decorate([2.34, 2.612["*"](er), 2["*"](3.141592653594)["*"](.259)["*"](au)["/"](86400["*"](46.688768)), .259, "f", "kepler11"])]);
+                    "65";
+                    stars_spec = RS_list_decorate([]);
+                    "66";
+                    stars_spec.extend(sun);
+                    "70";
+                    planet_spec = RS_list_decorate([]);
+                    "71";
+                    planet_spec.extend(solar_system_planets);
+                    "75";
+                    systems_list = RS_list_decorate([]);
+                    "76";
+                    systems_list.append(solar_system_planets);
+                    "81";
+                    scene = RS_interpolate_kwargs.call(this, canvas, [RS_desugar_kwargs({ title: "<b>Planetary System Simulation<\/b>\n", x: 0, y: 0, width: 16["*"](55), height: 9["*"](55), center: vector(0, 0, 0), background: vector(0, 0, 0) })]);
+                    "87";
+                    if (real_values_visuals === false || (typeof real_values_visuals === "undefined" ? "undefined" : _typeof(real_values_visuals)) === "object" && RS_equals(real_values_visuals, false)) {
+                            "88";
+                            scene.append_to_title("(Scaled visual values are used)\n\n");
+                            "89";
+                        } else {
+                            "90";
+                            scene.append_to_title("(Real visual values are used)\n\n");
+                        }
+                    "91";
+                    scene.append_to_title("<div id=\"seperator\"></div><br>");
+                    "95";
+                    ;
+                    if (!gforce.__argnames__) Object.defineProperties(gforce, {
+                        __argnames__: { value: ["p1", "p2"] }
+                    });
+
+                    "112";
+                    ;
+                    if (!collision_tf.__argnames__) Object.defineProperties(collision_tf, {
+                        __argnames__: { value: ["p1", "p2"] }
+                    });
+
+                    "123";
+                    ;
+                    if (!collision.__argnames__) Object.defineProperties(collision, {
+                        __argnames__: { value: ["p1", "p2"] }
+                    });
+
+                    "196";
+                    ;
+                    if (!chz.__argnames__) Object.defineProperties(chz, {
+                        __argnames__: { value: ["p1", "sun"] }
+                    });
+
+                    "213";
+                    systems_strings = RS_list_decorate([]);
+                    "215";
+                    stars = RS_list_decorate([]);
+                    "216";
+                    planets = RS_list_decorate([]);
+                    "219";
+                    labels = RS_list_decorate([]);
+                    "220";
+                    lights = RS_list_decorate([]);
+                    "221";
+                    labels_s = RS_list_decorate([]);
+                    "222";
+                    systems_scale = RS_list_decorate([]);
+                    "223";
+                    click_obj_planets = RS_list_decorate([]);
+                    "224";
+                    trails = RS_list_decorate([]);
+                    "226";
+                    selected = "none selected";
+                    "227";
+                    ;
+
+                    "302";
+                    create_scene();
+                    "304";
+                    scene.append_to_title("Select Planets/Stars in Simulation:\n\n");
+                    "306";
+                    lip = RS_list_decorate([]);
+                    "307";
+                    lip.append("none");
+                    "308";
+                    RS_Iter11 = RS_Iterable(systems_list);
+
+                    for (RS_Index11 = 0; RS_Index11["<"](RS_Iter11.length); RS_Index11++) {
+                        z = RS_Iter11[RS_Index11];
+                        "309";
+                        RS_Iter12 = RS_Iterable(z);
+
+                        for (RS_Index12 = 0; RS_Index12["<"](RS_Iter12.length); RS_Index12++) {
+                            i = RS_Iter12[RS_Index12];
+                            "310";
+                            lip.append(i[4]);
+                        }
+                    }
+                    "311";
+                    ;
+                    if (!M.__argnames__) Object.defineProperties(M, {
+                        __argnames__: { value: ["m"] }
+                    });
+
+                    "334";
+                    choose_p = RS_interpolate_kwargs.call(this, menu, [RS_desugar_kwargs({ choices: lip, bind: M, value: "planets", pos: scene.title_anchor })]);
+                    "336";
+                    lip_s = RS_list_decorate([]);
+                    "337";
+                    lip_s.append("none");
+                    "338";
+                    RS_Iter17 = RS_Iterable(stars_spec);
+
+                    for (RS_Index17 = 0; RS_Index17["<"](RS_Iter17.length); RS_Index17++) {
+                        z = RS_Iter17[RS_Index17];
+                        "339";
+                        lip_s.append(z[5]);
+                    }
+                    "340";
+                    ;
+                    if (!M_S.__argnames__) Object.defineProperties(M_S, {
+                        __argnames__: { value: ["m"] }
+                    });
+
+                    "360";
+                    choose_s = RS_interpolate_kwargs.call(this, menu, [RS_desugar_kwargs({ choices: lip_s, bind: M_S, value: "stars", pos: scene.title_anchor })]);
+                    "362";
+                    scene.append_to_title("\n\n");
+                    "365";
+                    ;
+                    if (!S.__argnames__) Object.defineProperties(S, {
+                        __argnames__: { value: ["s"] }
+                    });
+
+                    "371";
+                    RS_interpolate_kwargs.call(this, slider, [RS_desugar_kwargs({ bind: S, min: 60["*"](2), max: 60["*"](200)["*"](2), value: 60["*"](10)["*"](2), pos: scene.title_anchor, length: 200 })]);
+                    "372";
+                    wt = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "0.417 days/second scaling.\n", pos: scene.title_anchor })]);
+                    "374";
+                    n = 1;
+                    "375";
+                    ;
+                    if (!B_faster.__argnames__) Object.defineProperties(B_faster, {
+                        __argnames__: { value: ["b"] }
+                    });
+
+                    "381";
+                    RS_interpolate_kwargs.call(this, button, [RS_desugar_kwargs({ bind: B_faster, text: ">>", pos: scene.title_anchor })]);
+                    "383";
+                    ;
+                    if (!B.__argnames__) Object.defineProperties(B, {
+                        __argnames__: { value: ["b"] }
+                    });
+
+                    "392";
+                    RS_interpolate_kwargs.call(this, button, [RS_desugar_kwargs({ bind: B, text: "||", pos: scene.title_anchor })]);
+                    "394";
+                    wt2 = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "Realtime/Time: "["+"](str(round(t["/"](60)["/"](60), 1)))["+"]("h/")["+"](str(round(t_real, 1)))["+"]("s"), pos: scene.title_anchor })]);
+                    "396";
+                    obj_settings = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "\n\nAsteroid Settings:\n\n", pos: scene.title_anchor })]);
+                    "398";
+                    clickaction = false;
+                    "399";
+                    ;
+                    if (!B_clickaction.__argnames__) Object.defineProperties(B_clickaction, {
+                        __argnames__: { value: ["b"] }
+                    });
+
+                    "416";
+                    obj = scene.mouse.pick();
+                    "418";
+                    RS_interpolate_kwargs.call(this, button, [RS_desugar_kwargs({ bind: B_clickaction, text: "<img src=\"https://www.materialui.co/materialIcons/av/library_add_black_24x24.png\"> OnClick Action: Asteroid creation", pos: scene.title_anchor })]);
+                    "419";
+                    asteroid_density_text = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "\n\nRadius: Earths Radius (6371 km)\nDensity: "["+"](str(round(asteroid_mass["*"](me)["/"](4["/"](3)["*"](pi)["*"](GS_power(er["*"](1e3), 3)))["/"](1e3), 2)))["+"](" g/cm3\n"), pos: scene.title_anchor })]);
+                    "421";
+                    ;
+                    if (!asteroid_momentum_func.__argnames__) Object.defineProperties(asteroid_momentum_func, {
+                        __argnames__: { value: ["s"] }
+                    });
+
+                    "425";
+                    asteroid_momentum_winput = RS_interpolate_kwargs.call(this, winput, [RS_desugar_kwargs({ bind: asteroid_momentum_func, text: "0", pos: scene.title_anchor })]);
+                    "426";
+                    wt_am = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: " m/s speed (y-axis)", pos: scene.title_anchor })]);
+                    "428";
+                    scene.append_to_title("\n");
+                    "430";
+                    ;
+                    if (!asteroid_mass_func.__argnames__) Object.defineProperties(asteroid_mass_func, {
+                        __argnames__: { value: ["s"] }
+                    });
+
+                    "433";
+                    asteroid_mass_winput = RS_interpolate_kwargs.call(this, winput, [RS_desugar_kwargs({ bind: asteroid_mass_func, text: "0.4", pos: scene.title_anchor })]);
+                    "434";
+                    wt_ama = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "*me kg", pos: scene.title_anchor })]);
+                    "436";
+                    scene.append_to_title("\n\nSettings:\n\n");
+                    "438";
+                    ;
+                    if (!B_clear_trails.__argnames__) Object.defineProperties(B_clear_trails, {
+                        __argnames__: { value: ["b"] }
+                    });
+
+                    "441";
+                    RS_interpolate_kwargs.call(this, button, [RS_desugar_kwargs({ bind: B_clear_trails, text: "<img src=\"https://www.materialui.co/materialIcons/action/highlight_off_black_24x24.png\"> Clear all trails", pos: scene.title_anchor })]);
+                    "442";
+                    scene.append_to_title("\n");
+                    "445";
+                    better_view = true;
+                    "457";
+                    following = true;
+                    "458";
+                    scene.append_to_title("\n");
+                    "459";
+                    ;
+                    if (!B_following.__argnames__) Object.defineProperties(B_following, {
+                        __argnames__: { value: ["b"] }
+                    });
+
+                    "468";
+                    RS_interpolate_kwargs.call(this, checkbox, [RS_desugar_kwargs({ bind: B_following, text: "Camera following targets", pos: scene.title_anchor })]);
+                    "469";
+                    scene.append_to_title("\n");
+                    "471";
+                    trails_tf = true;
+                    "472";
+                    ;
+                    if (!B_stop_trails.__argnames__) Object.defineProperties(B_stop_trails, {
+                        __argnames__: { value: ["b"] }
+                    });
+
+                    "485";
+                    RS_interpolate_kwargs.call(this, checkbox, [RS_desugar_kwargs({ bind: B_stop_trails, text: "Trails: True", pos: scene.title_anchor })]);
+                    "487";
+                    obj_sm = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "\n\nSandboxmode Settings:\n\n", pos: scene.title_anchor })]);
+                    "489";
+                    sandbox_mode = false;
+                    "490";
+                    sandbox_mode_timer = 0;
+                    "491";
+                    testarrows = RS_list_decorate([]);
+                    "492";
+                    ;
+                    if (!sandbox_modef.__argnames__) Object.defineProperties(sandbox_modef, {
+                        __argnames__: { value: ["b"] }
+                    });
+
+                    "541";
+                    RS_interpolate_kwargs.call(this, checkbox, [RS_desugar_kwargs({ bind: sandbox_modef, text: "Sandboxmode: Off", pos: scene.title_anchor })]);
+                    "543";
+                    drag = false;
+                    "544";
+                    s_obj = null;
+                    "545";
+                    int_var = 0;
+                    "546";
+                    ;
+
+                    "600";
+                    ;
+
+                    "605";
+                    ;
+
+                    "610";
+                    scene.bind("mousedown", down);
+                    "611";
+                    scene.bind("mousemove", move);
+                    "612";
+                    scene.bind("mouseup", up);
+                    "614";
+                    obj_t = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "", pos: scene.title_anchor })]);
+                    "616";
+                    obj_g = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "\n<div id='test'>Environmental Settings:\n\n", pos: scene.caption_anchor })]);
+                    "617";
+                    ;
+                    if (!ev_g.__argnames__) Object.defineProperties(ev_g, {
+                        __argnames__: { value: ["s"] }
+                    });
+
+                    "621";
+                    sliderg = RS_interpolate_kwargs.call(this, slider, [RS_desugar_kwargs({ bind: ev_g, min: 0, max: 2, value: 1, pos: scene.caption_anchor, length: 200 })]);
+                    "622";
+                    wt_g = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({ text: "G: 6.67e-11 m^3/kg*s^2", pos: scene.caption_anchor })]);
+                    "625";
+                    scene.camera.pos = scene.camera.pos["+="](vector(0, 17["*"](au), 0));
+                    "626";
+                    scene.camera.axis = scene.camera.axis["+="](vector(0, 17["*"](au["-u"]()), 0));
+                    "629";
+                    RS_Iter36 = RS_Iterable(stars);
+
+                    for (RS_Index36 = 0; RS_Index36["<"](RS_Iter36.length); RS_Index36++) {
+                        star = RS_Iter36[RS_Index36];
+                        star.force = vector(0, 0, 0);
+                    }
+                    "630";
+                    RS_Iter37 = RS_Iterable(planets);
+
+                    for (RS_Index37 = 0; RS_Index37["<"](RS_Iter37.length); RS_Index37++) {
+                        planet = RS_Iter37[RS_Index37];
+                        planet.force = vector(0, 0, 0);
+                    }
+                    "632";
+
+                case 322:
+                    if (!t[">"](1["-u"]())) {
+                            _context.next = 341;
+                            break;
+                        }
+
+                    "633";
+                    _context.next = 326;
+                    return _streamline.await(_filename, 1266, null, rate, 1, null, false, [r, true]);
+
+                case 326:
+                    "636";
+                    if (sandbox_mode === true || (typeof sandbox_mode === "undefined" ? "undefined" : _typeof(sandbox_mode)) === "object" && RS_equals(sandbox_mode, true)) {
+                            "637";
+                            if (sandbox_mode_timer[">"](15)) {
+                                    "638";
+                                    RS_Iter38 = RS_Iterable(testarrows);
+
+                                    for (RS_Index38 = 0; RS_Index38["<"](RS_Iter38.length); RS_Index38++) {
+                                        i = RS_Iter38[RS_Index38];
+                                        "639";
+                                        i.visible = false;
+                                    }
+                                }
+                            "640";
+                            if (sandbox_mode_timer[">"](30)) {
+                                    "641";
+                                    RS_Iter39 = RS_Iterable(testarrows);
+
+                                    for (RS_Index39 = 0; RS_Index39["<"](RS_Iter39.length); RS_Index39++) {
+                                        i = RS_Iter39[RS_Index39];
+                                        "642";
+                                        i.visible = true;
+                                    }
+                                }
+                            "643";
+                            if (sandbox_mode_timer[">"](45)) {
+                                    "644";
+                                    RS_Iter40 = RS_Iterable(testarrows);
+
+                                    for (RS_Index40 = 0; RS_Index40["<"](RS_Iter40.length); RS_Index40++) {
+                                        i = RS_Iter40[RS_Index40];
+                                        "645";
+                                        i.visible = false;
+                                    }
+                                }
+                            "646";
+                            if (sandbox_mode_timer[">"](60)) {
+                                    "647";
+                                    RS_Iter41 = RS_Iterable(testarrows);
+
+                                    for (RS_Index41 = 0; RS_Index41["<"](RS_Iter41.length); RS_Index41++) {
+                                        i = RS_Iter41[RS_Index41];
+                                        "648";
+                                        i.visible = true;
+                                    }
+                                }
+                            "649";
+                            sandbox_mode_timer = sandbox_mode_timer["+="](1);
+                            "650";
+                            if (sandbox_mode_timer[">"](75)) {
+                                    "651";
+                                    RS_Iter42 = RS_Iterable(testarrows);
+
+                                    for (RS_Index42 = 0; RS_Index42["<"](RS_Iter42.length); RS_Index42++) {
+                                        i = RS_Iter42[RS_Index42];
+                                        "652";
+                                        i.visible = true;
+                                        "653";
+                                        i.opacity = .2;
+                                    }
+                                }
+                        }
+                    "662";
+                    RS_Iter43 = RS_Iterable(click_obj_planets);
+
+                    for (RS_Index43 = 0; RS_Index43["<"](RS_Iter43.length); RS_Index43++) {
+                        i = RS_Iter43[RS_Index43];
+                        i.radius = scene.range["/"](25);
+                    }
+                    "663";
+                    if (click_objects_visible === true || (typeof click_objects_visible === "undefined" ? "undefined" : _typeof(click_objects_visible)) === "object" && RS_equals(click_objects_visible, true)) {
+                            "664";
+                            RS_Iter44 = RS_Iterable(click_obj_planets);
+
+                            for (RS_Index44 = 0; RS_Index44["<"](RS_Iter44.length); RS_Index44++) {
+                                x = RS_Iter44[RS_Index44];
+                                "665";
+                                x.visible = true;
+                            }
+                        }
+                    "666";
+                    if (click_objects_visible === false || (typeof click_objects_visible === "undefined" ? "undefined" : _typeof(click_objects_visible)) === "object" && RS_equals(click_objects_visible, false)) {
+                            "667";
+                            RS_Iter45 = RS_Iterable(click_obj_planets);
+
+                            for (RS_Index45 = 0; RS_Index45["<"](RS_Iter45.length); RS_Index45++) {
+                                y = RS_Iter45[RS_Index45];
+                                "668";
+                                y.visible = false;
+                            }
+                        }
+                    "672";
+                    if (better_view === true || (typeof better_view === "undefined" ? "undefined" : _typeof(better_view)) === "object" && RS_equals(better_view, true)) {
+                            "673";
+                            RS_Iter46 = RS_Iterable(systems_scale);
+
+                            for (RS_Index46 = 0; RS_Index46["<"](RS_Iter46.length); RS_Index46++) {
+                                i = RS_Iter46[RS_Index46];
+                                "674";
+                                RS_Iter47 = RS_Iterable(stars);
+
+                                for (RS_Index47 = 0; RS_Index47["<"](RS_Iter47.length); RS_Index47++) {
+                                    star = RS_Iter47[RS_Index47];
+                                    "675";
+                                    if (i.belonging === star.belonging || _typeof(i.belonging) === "object" && RS_equals(i.belonging, star.belonging)) {
+                                            "676";
+                                            star_pos = star.pos;
+                                            "677";
+                                            star_searched = star;
+                                            "678";
+                                            i.pos = star_pos;
+                                            "679";
+                                            i.opacity = .2;
+                                            "680";
+                                            pos_star_label = stars.index(star);
+                                            "681";
+                                            f = labels_s[typeof pos_star_label === "number" && pos_star_label["<"](0) ? labels_s.length["+"](pos_star_label) : pos_star_label];
+                                            "682";
+                                            RS_Iter48 = RS_Iterable(labels);
+
+                                            for (RS_Index48 = 0; RS_Index48["<"](RS_Iter48.length); RS_Index48++) {
+                                                label_p = RS_Iter48[RS_Index48];
+                                                "683";
+                                                if (label_p.belonging === star_searched.belonging || _typeof(label_p.belonging) === "object" && RS_equals(label_p.belonging, star_searched.belonging)) {
+                                                        "684";
+                                                        label_p.visible = false;
+                                                        "685";
+                                                        f.text === star_searched.belonging || _typeof(f.text) === "object" && RS_equals(f.text, star_searched.belonging);
+                                                        "687";
+                                                        if (scene.range["/"](2)[">"](RS_cond_temp = i.radius) && RS_cond_temp[">"](scene.range["/"](4))) {
+                                                                "688";
+                                                                i.visible = true;
+                                                                "689";
+                                                                i.opacity = .2;
+                                                                "690";
+                                                                label_p.visible = false;
+                                                                "691";
+                                                                f.text = i.belonging;
+                                                                "692";
+                                                                click_objects_visible = false;
+                                                                "694";
+                                                            } else if (scene.range["/"](4)[">"](i.radius)) {
+                                                                "695";
+                                                                i.visible = true;
+                                                                "696";
+                                                                i.opacity = .2;
+                                                                "697";
+                                                                label_p.visible = false;
+                                                                "698";
+                                                                f.text = i.belonging;
+                                                                "699";
+                                                                click_objects_visible = false;
+                                                                "700";
+                                                            } else {
+                                                                "701";
+                                                                label_p.visible = true;
+                                                                "702";
+                                                                i.visible = false;
+                                                                "703";
+                                                                f.text = f.original_name;
+                                                                "704";
+                                                                if (click_objects_visible === false || (typeof click_objects_visible === "undefined" ? "undefined" : _typeof(click_objects_visible)) === "object" && RS_equals(click_objects_visible, false)) {
+                                                                        "705";
+                                                                        "706";
+                                                                    } else {
+                                                                        "707";
+                                                                        click_objects_visible = true;
+                                                                        "710";
+                                                                    }
+                                                            }
+                                                    }
+                                            }
+                                        }
+                                }
+                            }
+                        } else {
+                            "711";
+                            RS_Iter49 = RS_Iterable(labels);
+
+                            for (RS_Index49 = 0; RS_Index49["<"](RS_Iter49.length); RS_Index49++) {
+                                l = RS_Iter49[RS_Index49];
+                                "712";
+                                l.visible = true;
+                            }
+                            "713";
+                            RS_Iter50 = RS_Iterable(labels_s);
+
+                            for (RS_Index50 = 0; RS_Index50["<"](RS_Iter50.length); RS_Index50++) {
+                                x = RS_Iter50[RS_Index50];
+                                "714";
+                                x.visible = true;
+                                "715";
+                                x.text = x.original_name;
+                            }
+                            "716";
+                            RS_Iter51 = RS_Iterable(systems_scale);
+
+                            for (RS_Index51 = 0; RS_Index51["<"](RS_Iter51.length); RS_Index51++) {
+                                i = RS_Iter51[RS_Index51];
+                                "717";
+                                i.visible = false;
+                            }
+                        }
+                    "719";
+                    if (programm_running === true || (typeof programm_running === "undefined" ? "undefined" : _typeof(programm_running)) === "object" && RS_equals(programm_running, true)) {
+                            "721";
+                            RS_Iter52 = RS_Iterable(stars);
+
+                            for (RS_Index52 = 0; RS_Index52["<"](RS_Iter52.length); RS_Index52++) {
+                                star = RS_Iter52[RS_Index52];
+                                "722";
+                                star.force = vector(0, 0, 0);
+                                "723";
+                                RS_Iter53 = RS_Iterable(planets);
+
+                                for (RS_Index53 = 0; RS_Index53["<"](RS_Iter53.length); RS_Index53++) {
+                                    planet = RS_Iter53[RS_Index53];
+                                    "724";
+                                    star.force = star.force["+="](gforce(star, planet));
+                                }
+                                "725";
+                                RS_Iter54 = RS_Iterable(stars);
+
+                                for (RS_Index54 = 0; RS_Index54["<"](RS_Iter54.length); RS_Index54++) {
+                                    star_other = RS_Iter54[RS_Index54];
+                                    "726";
+                                    if (star !== star_other) {
+                                            star.force = star.force["+="](gforce(star, star_other));
+                                        }
+                                }
+                            }
+                            "729";
+                            RS_Iter55 = RS_Iterable(planets);
+
+                            for (RS_Index55 = 0; RS_Index55["<"](RS_Iter55.length); RS_Index55++) {
+                                planet = RS_Iter55[RS_Index55];
+                                "730";
+                                planet.force = vector(0, 0, 0);
+                                "731";
+                                RS_Iter56 = RS_Iterable(stars);
+
+                                for (RS_Index56 = 0; RS_Index56["<"](RS_Iter56.length); RS_Index56++) {
+                                    star = RS_Iter56[RS_Index56];
+                                    "732";
+                                    planet.force = planet.force["+="](gforce(planet, star));
+                                }
+                                "733";
+                                RS_Iter57 = RS_Iterable(planets);
+
+                                for (RS_Index57 = 0; RS_Index57["<"](RS_Iter57.length); RS_Index57++) {
+                                    planet_other = RS_Iter57[RS_Index57];
+                                    "734";
+                                    if (planet !== planet_other) {
+                                            planet.force = planet.force["+="](gforce(planet, planet_other));
+                                        }
+                                }
+                            }
+                            "737";
+                            RS_Iter58 = RS_Iterable(stars);
+
+                            for (RS_Index58 = 0; RS_Index58["<"](RS_Iter58.length); RS_Index58++) {
+                                star = RS_Iter58[RS_Index58];
+                                star.momentum = star.momentum["+="](star.force["*"](dt));
+                            }
+                            "738";
+                            RS_Iter59 = RS_Iterable(planets);
+
+                            for (RS_Index59 = 0; RS_Index59["<"](RS_Iter59.length); RS_Index59++) {
+                                planet = RS_Iter59[RS_Index59];
+                                planet.momentum = planet.momentum["+="](planet.force["*"](dt));
+                            }
+                            "741";
+                            RS_Iter60 = RS_Iterable(enumerate(stars));
+
+                            for (RS_Index60 = 0; RS_Index60["<"](RS_Iter60.length); RS_Index60++) {
+                                RS_unpack = RS_Iter60[RS_Index60];
+                                x = RS_unpack[0];
+                                star = RS_unpack[1];
+                                "742";
+                                star.pos = star.pos["+="](star.momentum["/"](star.mass)["*"](dt));
+                                "743";
+                                labels_s[typeof x === "number" && x["<"](0) ? labels_s.length["+"](x) : x].pos = star.pos;
+                            }
+                            "746";
+                            RS_Iter61 = RS_Iterable(enumerate(planets));
+
+                            for (RS_Index61 = 0; RS_Index61["<"](RS_Iter61.length); RS_Index61++) {
+                                RS_unpack = RS_Iter61[RS_Index61];
+                                y = RS_unpack[0];
+                                planet = RS_unpack[1];
+                                "747";
+                                planet.pos = planet.pos["+="](planet.momentum["/"](planet.mass)["*"](dt));
+                                "748";
+                                labels[typeof y === "number" && y["<"](0) ? labels.length["+"](y) : y].pos = planet.pos;
+                            }
+                            "757";
+                            RS_Iter62 = RS_Iterable(stars);
+
+                            for (RS_Index62 = 0; RS_Index62["<"](RS_Iter62.length); RS_Index62++) {
+                                star = RS_Iter62[RS_Index62];
+                                "758";
+                                RS_Iter63 = RS_Iterable(planets);
+
+                                for (RS_Index63 = 0; RS_Index63["<"](RS_Iter63.length); RS_Index63++) {
+                                    planet = RS_Iter63[RS_Index63];
+                                    "759";
+                                    if (RS_equals(collision_tf(star, planet), true)) {
+                                            "760";
+                                            collision(star, planet);
+                                            "761";
+                                        } else {
+                                            "762";
+                                        }
+                                }
+                            }
+                            "764";
+                            RS_Iter64 = RS_Iterable(planets);
+
+                            for (RS_Index64 = 0; RS_Index64["<"](RS_Iter64.length); RS_Index64++) {
+                                planet = RS_Iter64[RS_Index64];
+                                "765";
+                                RS_Iter65 = RS_Iterable(planets);
+
+                                for (RS_Index65 = 0; RS_Index65["<"](RS_Iter65.length); RS_Index65++) {
+                                    planet_other = RS_Iter65[RS_Index65];
+                                    "766";
+                                    if (planet !== planet_other) {
+                                            "767";
+                                            if (RS_equals(collision_tf(planet, planet_other), true)) {
+                                                    "768";
+                                                    collision(planet, planet_other);
+                                                    "769";
+                                                } else {
+                                                    "770";
+                                                }
+                                        }
+                                }
+                            }
+                            "772";
+                            RS_Iter66 = RS_Iterable(stars);
+
+                            for (RS_Index66 = 0; RS_Index66["<"](RS_Iter66.length); RS_Index66++) {
+                                star = RS_Iter66[RS_Index66];
+                                "773";
+                                RS_Iter67 = RS_Iterable(stars);
+
+                                for (RS_Index67 = 0; RS_Index67["<"](RS_Iter67.length); RS_Index67++) {
+                                    star_other = RS_Iter67[RS_Index67];
+                                    "774";
+                                    if (star !== star_other) {
+                                            "775";
+                                            if (RS_equals(collision_tf(star, star_other), true)) {
+                                                    "776";
+                                                    collision(star, star_other);
+                                                    "777";
+                                                } else {
+                                                    "778";
+                                                }
+                                        }
+                                }
+                            }
+                            "780";
+                            if (habitable_zone === true || (typeof habitable_zone === "undefined" ? "undefined" : _typeof(habitable_zone)) === "object" && RS_equals(habitable_zone, true)) {
+                                    "781";
+                                    RS_Iter68 = RS_Iterable(stars);
+
+                                    for (RS_Index68 = 0; RS_Index68["<"](RS_Iter68.length); RS_Index68++) {
+                                        star = RS_Iter68[RS_Index68];
+                                        "782";
+                                        RS_Iter69 = RS_Iterable(planets);
+
+                                        for (RS_Index69 = 0; RS_Index69["<"](RS_Iter69.length); RS_Index69++) {
+                                            planet = RS_Iter69[RS_Index69];
+                                            "783";
+                                            if (star.belonging === planet.belonging || _typeof(star.belonging) === "object" && RS_equals(star.belonging, planet.belonging)) {
+                                                    "784";
+                                                    chz(planet, star);
+                                                }
+                                        }
+                                    }
+                                }
+                            "787";
+                            RS_Iter70 = RS_Iterable(click_obj_planets);
+
+                            for (RS_Index70 = 0; RS_Index70["<"](RS_Iter70.length); RS_Index70++) {
+                                i = RS_Iter70[RS_Index70];
+                                "788";
+                                RS_Iter71 = RS_Iterable(planets);
+
+                                for (RS_Index71 = 0; RS_Index71["<"](RS_Iter71.length); RS_Index71++) {
+                                    p = RS_Iter71[RS_Index71];
+                                    "789";
+                                    if (p.name === i.belonging || _typeof(p.name) === "object" && RS_equals(p.name, i.belonging)) {
+                                            "790";
+                                            i.pos = p.pos;
+                                            "791";
+                                        } else if (p.belonging === i.belonging || _typeof(p.belonging) === "object" && RS_equals(p.belonging, i.belonging)) {
+                                            "792";
+                                            i.pos = p.pos;
+                                        }
+                                }
+                            }
+                            "795";
+                            if (following === true || (typeof following === "undefined" ? "undefined" : _typeof(following)) === "object" && RS_equals(following, true)) {
+                                    "796";
+                                    if (choose_p.selected !== "none" && choose_s.selected === "none") {
+                                            "797";
+                                            RS_Iter72 = RS_Iterable(planets);
+
+                                            for (RS_Index72 = 0; RS_Index72["<"](RS_Iter72.length); RS_Index72++) {
+                                                planet = RS_Iter72[RS_Index72];
+                                                "798";
+                                                if (planet.name === choose_p.selected || _typeof(planet.name) === "object" && RS_equals(planet.name, choose_p.selected)) {
+                                                        "799";
+                                                        scene.center = planet.pos;
+                                                        "800";
+                                                    } else if (planet.belonging === selected || _typeof(planet.belonging) === "object" && RS_equals(planet.belonging, selected)) {
+                                                        "801";
+                                                        scene.center = planet.pos;
+                                                        "802";
+                                                    } else {
+                                                        "803";
+                                                    }
+                                            }
+                                        }
+                                }
+                            "805";
+                            if (following === true || (typeof following === "undefined" ? "undefined" : _typeof(following)) === "object" && RS_equals(following, true)) {
+                                    "806";
+                                    if (choose_s.selected !== "none" && choose_p.selected === "none") {
+                                            "807";
+                                            RS_Iter73 = RS_Iterable(stars);
+
+                                            for (RS_Index73 = 0; RS_Index73["<"](RS_Iter73.length); RS_Index73++) {
+                                                star = RS_Iter73[RS_Index73];
+                                                "808";
+                                                if (star.name === choose_s.selected || _typeof(star.name) === "object" && RS_equals(star.name, choose_s.selected)) {
+                                                        "809";
+                                                        scene.center = star.pos;
+                                                    }
+                                            }
+                                        }
+                                }
+                            "811";
+                            if (following === true || (typeof following === "undefined" ? "undefined" : _typeof(following)) === "object" && RS_equals(following, true)) {
+                                    "812";
+                                    if (choose_s.selected === "none" && choose_p.selected === "none") {
+                                            "813";
+                                            RS_Iter74 = RS_Iterable(planets);
+
+                                            for (RS_Index74 = 0; RS_Index74["<"](RS_Iter74.length); RS_Index74++) {
+                                                planet = RS_Iter74[RS_Index74];
+                                                "814";
+                                                if (planet.belonging === selected || _typeof(planet.belonging) === "object" && RS_equals(planet.belonging, selected)) {
+                                                        "815";
+                                                        scene.center = planet.pos;
+                                                    }
+                                            }
+                                        }
+                                }
+                            "817";
+                            RS_Iter75 = RS_Iterable(planets);
+
+                            for (RS_Index75 = 0; RS_Index75["<"](RS_Iter75.length); RS_Index75++) {
+                                i = RS_Iter75[RS_Index75];
+                                "818";
+                                if (i.name === selected || _typeof(i.name) === "object" && RS_equals(i.name, selected)) {
+                                        "819";
+                                        obj_t.text = i.name;
+                                        "820";
+                                        obj_t.text = "\n<div id=\"data\">"["+"]("<b>")["+"](i.name)["+"]("</b> <span style=\"color: green;\">Present</span> | Values:\n")["+"](str(i.mass["/"](me)))["+"]("*earths mass\n")["+"](str(round(mag(i.momentum)["/"](i.mass), 2)))["+"](" m/s velocity\n")["+"](str(i.temp))["+"]("K average teperature (")["+"](str(round(i.temp["-"](273.15), 1)))["+"](" °C)\n")["+"](str(i.mass["/"](4["/"](3)["*"](pi)["*"](GS_power(i.radius, 3)))["/"](1e3)))["+"](" g/cm3 (average density)\n")["+"](str(i.radians))["+"](" hours per rotation </div>");
+                                        "821";
+                                        asteroid_momentum = i.momentum["/"](i.mass)["*"](asteroid_mass)["*"](me);
+                                        "822";
+                                        asteroid_momentum_winput.disabled = true;
+                                    }
+                            }
+                            "823";
+                            RS_Iter76 = RS_Iterable(stars);
+
+                            for (RS_Index76 = 0; RS_Index76["<"](RS_Iter76.length); RS_Index76++) {
+                                i = RS_Iter76[RS_Index76];
+                                "824";
+                                if (i.name === selected || _typeof(i.name) === "object" && RS_equals(i.name, selected)) {
+                                        "825";
+                                        obj_t.text = i.name;
+                                        "826";
+                                        obj_t.text = "\n<div id=\"data\">"["+"]("<b>")["+"](i.name)["+"]("</b> <span style=\"color: green;\">Present</span> | Values:\n")["+"](str(i.mass["/"](ms)))["+"]("*suns mass\n")["+"](str(round(mag(i.momentum)["/"](i.mass), 2)))["+"](" m/s velocity\n")["+"](str(i.temp))["+"]("K average teperature (")["+"](str(round(i.temp["-"](273.15), 1)))["+"](" °C)\n")["+"](str(i.mass["/"](4["/"](3)["*"](pi)["*"](GS_power(i.radius, 3)))["/"](1e3)))["+"](" g/cm3 (average density)\n")["+"](str(i.radians))["+"](" hours per rotation </div>");
+                                        "827";
+                                        asteroid_momentum = i.momentum["/"](i.mass)["*"](asteroid_mass)["*"](me);
+                                        "828";
+                                        asteroid_momentum_winput.disabled = true;
+                                    }
+                            }
+                            "829";
+                            if (selected === "none" || (typeof selected === "undefined" ? "undefined" : _typeof(selected)) === "object" && RS_equals(selected, "none")) {
+                                    "830";
+                                    obj_t.text = "\n<div id=\"data\"><span style=\"color: red;\">Object Destroyed</span></div>";
+                                    "831";
+                                    asteroid_momentum_winput.disabled = false;
+                                }
+                            "833";
+                            asteroid_density_text.text = "\n\nRadius: Earths Radius (6371 km)\nDensity: "["+"](str(round(asteroid_mass["*"](me)["/"](4["/"](3)["*"](pi)["*"](GS_power(er["*"](1e3), 3)))["/"](1e3), 2)))["+"](" g/cm3\n");
+                            "836";
+                            RS_Iter77 = RS_Iterable(planets);
+
+                            for (RS_Index77 = 0; RS_Index77["<"](RS_Iter77.length); RS_Index77++) {
+                                p = RS_Iter77[RS_Index77];
+                                "837";
+                                if (p.radians === "none" || _typeof(p.radians) === "object" && RS_equals(p.radians, "none")) {
+                                        "838";
+                                        "839";
+                                    } else {
+                                        "840";
+                                        radians_var = 360["*"](dt["/"](60)["/"](60)["/"](p.radians));
+                                        "841";
+                                        RS_interpolate_kwargs.call(p, p.rotate, [RS_desugar_kwargs({ angle: radians(radians_var), axis: vec(0, 1, 0) })]);
+                                    }
+                            }
+                            "842";
+                            RS_Iter78 = RS_Iterable(stars);
+
+                            for (RS_Index78 = 0; RS_Index78["<"](RS_Iter78.length); RS_Index78++) {
+                                s = RS_Iter78[RS_Index78];
+                                "843";
+                                if (s.radians === "none" || _typeof(s.radians) === "object" && RS_equals(s.radians, "none")) {
+                                        "844";
+                                        "845";
+                                    } else {
+                                        "846";
+                                        radians_var = 360["*"](dt["/"](60)["/"](60)["/"](s.radians));
+                                        "847";
+                                        RS_interpolate_kwargs.call(s, s.rotate, [RS_desugar_kwargs({ angle: radians(radians_var), axis: vec(0, 1, 0) })]);
+                                    }
+                            }
+                            "849";
+                            if (RS_equals(t, 60["*"](5))) {
+                                    "850";
+                                    scene.autoscale = false;
+                                }
+                            "851";
+                            t = t["+="](dt);
+                            "852";
+                            t_real = t_real["+="](1["/"](r));
+                            "853";
+                            wt2.text = "Realtime/Time: "["+"](str(round(t["/"](60)["/"](60), 1)))["+"]("h/")["+"](str(round(t_real, 1)))["+"]("s");
+                        }
+                    _context.next = 322;
+                    break;
+
+                case 341:
+                case "end":
+                    return _context.stop();
+            }
+        }
+    }, _$$main$$, this);
+}), 0, 1);
+
+var RS_modules = {};
+var selected, dt, n, programm_running, clickaction, click_objects_visible, asteroid_momentum, asteroid_mass, following, trails_tf, sandbox_mode, testarrows, s_obj, drag, int_var, G;
+RS_modules.pythonize = {};
+
+(function () {
+    var strings = function strings() {
+        var string_funcs, exclude, name;
+        string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+        if (!arguments.length) {
+                exclude = function () {
+                    var s = RS_set();
+                    s.jsset.add("split");
+                    s.jsset.add("replace");
+                    return s;
+                }();
+            } else if (arguments[0]) {
+                exclude = Array.prototype.slice.call(arguments);
+            } else {
+                exclude = null;
+            }
+        if (exclude) {
+                string_funcs = string_funcs.difference(set(exclude));
+            }
+        var RS_Iter0 = RS_Iterable(string_funcs);
+        for (var RS_Index0 = 0; RS_Index0["<"](RS_Iter0.length); RS_Index0++) {
+            name = RS_Iter0[RS_Index0];
+            (RS_expr_temp = String.prototype)[typeof name === "number" && name["<"](0) ? RS_expr_temp.length["+"](name) : name] = (RS_expr_temp = RS_str.prototype)[typeof name === "number" && name["<"](0) ? RS_expr_temp.length["+"](name) : name];
+        }
+    };
+
+    ;
+
+    RS_modules.pythonize.strings = strings;
+})();
+;
+if (!main.__argnames__) Object.defineProperties(main, {
+    __argnames__: { value: ["_"] }
+});
+;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; main(function(err) {;}) })})()
+// END JAVASCRIPT
+
+//--><!]]></script>
+</div>
+</body>
+</html>

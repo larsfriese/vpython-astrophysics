@@ -1,0 +1,568 @@
+<html>
+<head>
+  <title>vpython-astrophysics</title>
+</head>
+<body>
+<div id="glowscript" class="glowscript">
+  <div class="version" style="position: absolute;
+  top: 4px;
+  right: 4px;
+  text-align: right;">Version 0.1 (Alpha)<br>Performance depends on system.<br>(30 fps)</div>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <link type="text/css" href="https://s3.amazonaws.com/glowscript/css/redmond/2.1/jquery-ui.custom.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css?family=Inconsolata" rel="stylesheet" type="text/css" />
+  <link type="text/css" href="https://s3.amazonaws.com/glowscript/css/ide.css" rel="stylesheet" />
+  <script type="text/javascript" src="https://s3.amazonaws.com/glowscript/lib/jquery/2.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://s3.amazonaws.com/glowscript/lib/jquery/2.1/jquery-ui.custom.min.js"></script>
+  <script type="text/javascript" src="https://s3.amazonaws.com/glowscript/package/glow.2.9.min.js"></script>
+  <script type="text/javascript" src="https://s3.amazonaws.com/glowscript/package/RSrun.2.9.min.js"></script>
+  <script type="text/javascript"><!--//--><![CDATA[//><!--
+
+  // START JAVASCRIPT
+  ;(function() {;
+  var RS_modules = {};
+  var addition_years, new_sun_mass, new_sun_radius, new_sun_density;
+  RS_modules.pythonize = {};
+
+  (function(){
+      function strings() {
+          var string_funcs, exclude, name;
+          string_funcs = set("capitalize strip lstrip rstrip islower isupper isspace lower upper swapcase center count endswith startswith find rfind index rindex format join ljust rjust partition rpartition replace split rsplit splitlines zfill".split(" "));
+          if (!arguments.length) {
+              exclude = (function(){
+                  var s = RS_set();
+                  s.jsset.add("split");
+                  s.jsset.add("replace");
+                  return s;
+              })();
+          } else if (arguments[0]) {
+              exclude = Array.prototype.slice.call(arguments);
+          } else {
+              exclude = null;
+          }
+          if (exclude) {
+              string_funcs = string_funcs.difference(set(exclude));
+          }
+          var RS_Iter0 = string_funcs;
+          RS_Iter0 = ((typeof RS_Iter0[Symbol.iterator] === "function") ? (RS_Iter0 instanceof Map ? RS_Iter0.keys() : RS_Iter0) : Object.keys(RS_Iter0));
+          for (var RS_Index0 of RS_Iter0) {
+              name = RS_Index0;
+              (RS_expr_temp = String.prototype)[(typeof name === "number" && name < 0) ? RS_expr_temp.length + name : name] = (RS_expr_temp = RS_str.prototype)[(typeof name === "number" && name < 0) ? RS_expr_temp.length + name : name];
+          }
+      };
+
+      RS_modules.pythonize.strings = strings;
+  })();
+  async function __main__() {
+      var version, box, sphere, simple_sphere, cylinder, pyramid, cone, helix, ellipsoid, ring, arrow, compound, display, vector, print, arange, type, scene, RS_ls, e_graph, K, k, G, c, sun_mass, sun_radius, sun_lightforce, hydrogen_atom_mass, helium_atom_mass, co_atom_mass, specific_heat_co, specific_heat_helium, specific_heat_hydrogen, r, current_time, addition_years, time_run, status, status_eq, burning, white_dwarf, hydrogen, helium, co, new_sun_mass, core_mass, new_sun_radius, new_sun_lightforce, sun_mass_loss_per_year, sun_volume, new_sun_density, sun_core_pressure, average_atom_mass_core, average_heat_capacity_core, sun_core_temp, temp_change, star, star_helium_burning, status_text, status_eq_text, time_run_slider, current_time_text, sun_lifetime_text, sun_lifetime_text_extended, sun_lifetime_progress_bar, html_text, spliter, information_text, information_text_mass, information_text_radius, spliter_core, information_text_core, information_text_sun_core_mass, information_text_sun_core_temp, information_text_sun_core_pressure, information_text_composition_dict, information_text_links, e_plot, plot_e, plot_h, plot_k, plot_c, plot_o, plot_s, per_reaction_energy, reaction_per_sec, sun_core_mass, kg_per_reaction, possible_reactions, lifetime, sun_lifetime, free_fall_time_counter, free_fall_time, radius_wd, helium_loss, co_gain, per_reaction_energy_co, reaction_per_sec_co, kg_per_reaction_co, possible_reactions_co, lifetime_co, sun_lifetime_co, hydrogen_loss, helium_gain, pressure_eq, gravity_eq, t;
+      version = RS_list_decorate([ "2.9", "glowscript" ]);
+      Array.prototype['+']=function(r) {return this.concat(r)}
+      Array.prototype['*']=function(r) {return __array_times_number(this, r)}
+      window.__GSlang = "vpython";
+      box = vp_box;
+      sphere = vp_sphere;
+      simple_sphere = vp_simple_sphere;
+      cylinder = vp_cylinder;
+      pyramid = vp_pyramid;
+      cone = vp_cone;
+      helix = vp_helix;
+      ellipsoid = vp_ellipsoid;
+      ring = vp_ring;
+      arrow = vp_arrow;
+      compound = vp_compound;
+      display = canvas;
+      vector = vec;
+      print = GSprint;
+      arange = range;
+      type = pytype;
+      scene = canvas();
+      var strings = RS_modules.pythonize.strings;
+
+      strings();
+      "4";
+      e_graph = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({color: color.blue})]);
+      "6";
+      scene = RS_interpolate_kwargs.call(this, canvas, [RS_desugar_kwargs({title: "<link rel=\"stylesheet\" href=\"https://www.w3schools.com/w3css/4/w3.css\">", x: 0, y: 0, width: 16["*"](40), height: 9["*"](25), center: vector(0, 0, 0), background: vector(0, 0, 0)})]);
+      "11";
+      K = 89875517873681760;
+      "12";
+      k = 1.38064852["*"](GS_power(10, 23["-u"]()));
+      "13";
+      G = 6.67408["*"](GS_power(10, 11["-u"]()));
+      "14";
+      c = 2.998["*"](GS_power(10, 8));
+      "15";
+      sun_mass = 1.989["*"](GS_power(10, 30));
+      "16";
+      sun_radius = 69551e4;
+      "17";
+      sun_lightforce = 3.86["*"](GS_power(10, 26));
+      "18";
+      hydrogen_atom_mass = 1.6735575["*"](GS_power(10, 27["-u"]()));
+      "19";
+      helium_atom_mass = 6.6464764["*"](GS_power(10, 27["-u"]()));
+      "20";
+      co_atom_mass = 1.9944235["*"](GS_power(10, 26["-u"]()));
+      "22";
+      specific_heat_co = 1262;
+      "23";
+      specific_heat_helium = 5192;
+      "24";
+      specific_heat_hydrogen = 14300;
+      "26";
+      r = 60;
+      "27";
+      current_time = 0;
+      "28";
+      addition_years = 1e5;
+      "29";
+      time_run = true;
+      "30";
+      status = "Burning Helium, core expanding.";
+      "31";
+      status_eq = "No values yet.";
+      "32";
+      burning = true;
+      "33";
+      white_dwarf = false;
+      "36";
+      hydrogen = 1;
+      "37";
+      helium = 0;
+      "38";
+      co = 0;
+      "40";
+      new_sun_mass = 1.989["*"](GS_power(10, 30));
+      "41";
+      core_mass = new_sun_mass["*"](.1);
+      "42";
+      new_sun_radius = 69551e4;
+      "43";
+      new_sun_lightforce = sun_lightforce["*"](GS_power((new_sun_mass["/"](sun_mass)), 3.5));
+      "44";
+      sun_mass_loss_per_year = new_sun_lightforce["/"](GS_power(c, 2))["*"](60)["*"](60)["*"](24)["*"](365);
+      "46";
+      sun_volume = 4["/"](3)["*"](pi)["*"](GS_power(sun_radius, 3));
+      "47";
+      new_sun_density = new_sun_mass["/"](sun_volume);
+      "48";
+      sun_core_pressure = 2["*"](G)["*"](GS_power(sun_mass, 2))["/"](pi["*"](GS_power(sun_radius, 4)));
+      "50";
+      average_atom_mass_core = helium["*"](100)["*"](helium_atom_mass)["+"](hydrogen["*"](100)["*"](hydrogen_atom_mass))["+"](co["*"](100)["*"](co_atom_mass))["/"](100);
+      "51";
+      average_heat_capacity_core = core_mass["*"](helium)["/"](new_sun_mass)["*"](10)["*"](specific_heat_helium)["+"](core_mass["*"](hydrogen)["/"](new_sun_mass)["*"](10)["*"](specific_heat_hydrogen))["+"](core_mass["*"](co)["/"](new_sun_mass)["*"](10)["*"](specific_heat_co));
+      "52";
+      print(average_heat_capacity_core);
+      "55";
+      sun_core_temp = G["*"](new_sun_mass)["*"](average_atom_mass_core)["/"](new_sun_radius["*"](3["/"](2))["*"](k));
+      "59";
+      async function M(r) {
+          "60";
+          return new_sun_density["*"](4["/"](3))["*"](pi)["*"](GS_power(r, 3));
+      };
+      if (!M.__argnames__) Object.defineProperties(M, {
+          __argnames__ : {value: ["r"]}
+      });
+
+      "63";
+      async function P(r) {
+          "64";
+          return 3["/"](8["*"](pi))["*"](G["*"](GS_power(new_sun_mass, 2))["/"](GS_power(new_sun_radius, 4)))["*"](1["-"](GS_power(r, 2)["/"](GS_power(new_sun_radius, 2))));
+      };
+      if (!P.__argnames__) Object.defineProperties(P, {
+          __argnames__ : {value: ["r"]}
+      });
+
+      "67";
+      temp_change = 3["/"](10)["*"](G)["*"](GS_power(new_sun_mass, 2)["/"](new_sun_radius))["/"](new_sun_mass["*"](average_heat_capacity_core));
+      "69";
+      star = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({pos: vector(0, 0, 0), radius: sun_radius, color: color.yellow, mass: sun_mass, momentum: vector(0, 0, 0), make_trail: false, lightforce: sun_lightforce, name: "sun", opacity: .5})]);
+      "70";
+      star_helium_burning = RS_interpolate_kwargs.call(this, sphere, [RS_desugar_kwargs({pos: vector(0, 0, 0), radius: sun_radius["*"](.2), color: color.orange, name: "sun_help_obj", visible: false})]);
+      "72";
+      status_text = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<b>Status: "["+"](status)["+"]("<\/b>\n"), pos: scene.title_anchor})]);
+      "73";
+      status_eq_text = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<b>Hydrostatic Equilibrium Status: "["+"](status_eq)["+"]("</b>\n"), pos: scene.title_anchor})]);
+      "75";
+      async function time_run_slider_function(s) {
+          "76";
+          "77";
+          addition_years = s.value;
+      };
+      if (!time_run_slider_function.__argnames__) Object.defineProperties(time_run_slider_function, {
+          __argnames__ : {value: ["s"]}
+      });
+
+      "78";
+      time_run_slider = RS_interpolate_kwargs.call(this, slider, [RS_desugar_kwargs({bind: time_run_slider_function, min: 0, max: addition_years["*"](r)["*"](5), value: addition_years["*"](r), pos: scene.title_anchor, length: 200})]);
+      "80";
+      current_time_text = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "Lived: "["+"](str(current_time))["+"](" years (")["+"](str(current_time["*"](60)))["+"](" years/sec)\n"), pos: scene.title_anchor})]);
+      "81";
+      sun_lifetime_text = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "Total Lifetime (Main Sequence): "["+"](str(0))["+"](" years"), pos: scene.title_anchor})]);
+      "82";
+      sun_lifetime_text_extended = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: " ≈ 10^"["+"](str(len(str(0))))["+"](" years"), pos: scene.title_anchor})]);
+      "83";
+      sun_lifetime_progress_bar = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<div class=\"w3-light-grey w3-tiny\" style=\"width:640px; border: 1px solid grey\"><div class=\"w3-container w3-green\" style=\"width:0%\">0%</div></div>", pos: scene.title_anchor})]);
+      "84";
+      html_text = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<script>function hide() {var x = document.getElementById(\"hide_sources\");if (x.style.display === \"none\") {x.style.display = \"block\";} else {x.style.display = \"none\"}}</script>", pos: scene.title_anchor})]);
+      "107";
+      spliter = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<br>", pos: scene.title_anchor})]);
+      "108";
+      information_text = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<b>Information Star:</b>", pos: scene.title_anchor})]);
+      "109";
+      information_text_mass = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "\nMass: "["+"](str(new_sun_mass))["+"](" kg (")["+"](str(round(new_sun_mass["/"](sun_mass), 3)))["+"](" *sun_mass)<br>"), pos: scene.title_anchor})]);
+      "111";
+      async function remove_mass(b) {
+          var RS_ls, addition_value, old_sun_mass, percentage_mass_add, old_amount, helium, old_amount_h, hydrogen;
+          "112";
+          "113";
+          addition_value = 2["*"](GS_power(10, 30));
+          "114";
+          old_sun_mass = new_sun_mass;
+          "115";
+          new_sun_mass=new_sun_mass["-"](addition_value);
+          "116";
+          percentage_mass_add = new_sun_mass["/"](addition_value);
+          "118";
+          old_amount = helium["*"](old_sun_mass);
+          "119";
+          helium = old_amount["/"](new_sun_mass);
+          "120";
+          old_amount_h = hydrogen["*"](old_sun_mass)["*"](.1);
+          "121";
+          hydrogen = old_amount_h["-"](.1["*"](addition_value))["/"](new_sun_mass["*"](.1));
+      };
+      if (!remove_mass.__argnames__) Object.defineProperties(remove_mass, {
+          __argnames__ : {value: ["b"]}
+      });
+
+      "122";
+      RS_interpolate_kwargs.call(this, button, [RS_desugar_kwargs({bind: remove_mass, text: "- 1*sun_mass (Hydrogen, equaly distributed) (BUG)", pos: scene.title_anchor})]);
+      "124";
+      async function add_mass(b) {
+          var RS_ls, addition_value, old_sun_mass, percentage_mass_add, old_amount, helium, old_amount_h, hydrogen;
+          "125";
+          "126";
+          addition_value = sun_mass;
+          "127";
+          old_sun_mass = new_sun_mass;
+          "128";
+          new_sun_mass=new_sun_mass["+"](addition_value);
+          "129";
+          percentage_mass_add = new_sun_mass["/"](addition_value);
+          "131";
+          old_amount = helium["*"](old_sun_mass);
+          "132";
+          helium = old_amount["/"](new_sun_mass);
+          "135";
+          old_amount_h = hydrogen["*"](old_sun_mass)["*"](.1);
+          "136";
+          hydrogen = old_amount_h["+"](addition_value["*"](.1))["/"](new_sun_mass["*"](.1));
+      };
+      if (!add_mass.__argnames__) Object.defineProperties(add_mass, {
+          __argnames__ : {value: ["b"]}
+      });
+
+      "137";
+      RS_interpolate_kwargs.call(this, button, [RS_desugar_kwargs({bind: add_mass, text: "+ 1*sun_mass (Hydrogen, equaly distributed)", pos: scene.title_anchor})]);
+      "139";
+      information_text_radius = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "\nRadius: "["+"](str(new_sun_radius))["+"](" m<br>"), pos: scene.title_anchor})]);
+      "141";
+      async function remove_radius(b) {
+          var RS_ls, addition_value_radius;
+          "142";
+          "143";
+          addition_value_radius = GS_power(10, 3);
+          "144";
+          new_sun_radius=new_sun_radius["-"](addition_value_radius);
+      };
+      if (!remove_radius.__argnames__) Object.defineProperties(remove_radius, {
+          __argnames__ : {value: ["b"]}
+      });
+
+      "145";
+      RS_interpolate_kwargs.call(this, button, [RS_desugar_kwargs({bind: remove_radius, text: "- 10^3 m", pos: scene.title_anchor})]);
+      "147";
+      async function add_radius(b) {
+          var RS_ls, addition_value_radius;
+          "148";
+          "149";
+          "150";
+          "151";
+          addition_value_radius = GS_power(10, 3);
+          "152";
+          new_sun_radius=new_sun_radius["+"](addition_value_radius);
+          "153";
+          new_sun_density = new_sun_mass["/"](4["/"](3)["*"](pi)["*"](GS_power(new_sun_radius, 3)));
+          "154";
+          new_sun_mass = new_sun_density["*"](4)["/"](3)["*"](pi)["*"](GS_power(new_sun_radius, 3));
+          "155";
+          print(new_sun_mass);
+      };
+      if (!add_radius.__argnames__) Object.defineProperties(add_radius, {
+          __argnames__ : {value: ["b"]}
+      });
+
+      "156";
+      RS_interpolate_kwargs.call(this, button, [RS_desugar_kwargs({bind: add_radius, text: "+ 10^3 m", pos: scene.title_anchor})]);
+      "158";
+      spliter_core = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<br><br>", pos: scene.title_anchor})]);
+      "159";
+      information_text_core = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<b>Information Star Core:</b>\n", pos: scene.title_anchor})]);
+      "160";
+      information_text_sun_core_mass = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "\nCore Mass: "["+"](str(new_sun_mass["/"](10)))["+"](" kg<br>"), pos: scene.title_anchor})]);
+      "161";
+      information_text_sun_core_temp = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "\nCore Temperature: "["+"](str(sun_core_temp))["+"](" K"), pos: scene.title_anchor})]);
+      "162";
+      information_text_sun_core_pressure = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "\nCore Pressure: "["+"](str((await P(0))))["+"](" Pa"), pos: scene.title_anchor})]);
+      "163";
+      information_text_composition_dict = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "Elements: H("["+"](str(hydrogen))["+"]("), He(")["+"](str(helium))["+"]("), C(")["+"](str(co))["+"](")"), pos: scene.title_anchor})]);
+      "165";
+      information_text_links = RS_interpolate_kwargs.call(this, wtext, [RS_desugar_kwargs({text: "<button onclick=\"hide()\"><b>Sources/Links</b></button><div id=\"hide_sources\" style=\"display: none;\">\nhttp://earthguide.ucsd.edu/virtualmuseum/images/raw/protonprotonchain.jpg\nhttp://astronomy.swin.edu.au/cosmos/M/Main+Sequence+Lifetime\nhttp://www.pa.uky.edu/~wilhelm/ast192_f09/Calculating%20the%20Lifetime%20of%20the%20Sun.pdf\n\nhttps://www.atnf.csiro.au/outreach/education/senior/astrophysics/stellarevolution_postmain.html\nhttp://abyss.uoregon.edu/~js/ast122/lectures/lec16.html\nHyperphysics: http://230nsc1.phy-astr.gsu.edu/hbase/hframe.html</div>", pos: scene.caption_anchor})]);
+      "167";
+      e_plot = RS_interpolate_kwargs.call(this, graph, [RS_desugar_kwargs({scroll: true, fast: false, xmin: 0, xmax: new_sun_mass, title: "Fusion temperatures compared with simulated star fusion potentials", xtitle: "Years", ytitle: "Temperature Potetntial", width: 16["*"](40), height: 9["*"](25)})]);
+      "168";
+      plot_e = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({label: "Energy", color: color.red})]);
+      "169";
+      plot_h = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({label: "H to He fusion"})]);
+      "170";
+      plot_k = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({label: "He to Co/O fusion"})]);
+      "171";
+      plot_c = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({label: "Co to Mg/Na/Ne fusion"})]);
+      "172";
+      plot_o = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({label: "O to S/P/Si fusion"})]);
+      "173";
+      plot_s = RS_interpolate_kwargs.call(this, gcurve, [RS_desugar_kwargs({label: "Si to Fe fusion"})]);
+      "179";
+      while (current_time[">"](1["-u"]())) {
+          "180";
+          ;(await rate(r));
+          "183";
+          per_reaction_energy = 4.32["*"](GS_power(10, 12["-u"]()));
+          "184";
+          reaction_per_sec = new_sun_lightforce["/"](per_reaction_energy);
+          "186";
+          sun_core_mass = core_mass;
+          "187";
+          information_text_sun_core_mass.text = "Core Mass: "["+"](str(new_sun_mass["/"](10)))["+"](" kg");
+          "188";
+          kg_per_reaction = 6.692["*"](GS_power(10, 27["-u"]()));
+          "189";
+          possible_reactions = sun_core_mass["/"](kg_per_reaction);
+          "191";
+          lifetime = possible_reactions["/"](reaction_per_sec);
+          "192";
+          sun_lifetime = lifetime["/"](pi["*"](GS_power(10, 7)));
+          "194";
+          RS_interpolate_kwargs.call(plot_e, plot_e.plot, [RS_desugar_kwargs({pos: RS_list_decorate([ current_time, sun_core_temp["+"](temp_change) ])})]);
+          "195";
+          RS_interpolate_kwargs.call(plot_k, plot_k.plot, [RS_desugar_kwargs({pos: RS_list_decorate([ current_time, GS_power(10, 8) ])})]);
+          "196";
+          RS_interpolate_kwargs.call(plot_h, plot_h.plot, [RS_desugar_kwargs({pos: RS_list_decorate([ current_time, 15["*"](GS_power(10, 6)) ])})]);
+          "197";
+          RS_interpolate_kwargs.call(plot_c, plot_c.plot, [RS_desugar_kwargs({pos: RS_list_decorate([ current_time, 5["*"](GS_power(10, 8)) ])})]);
+          "198";
+          RS_interpolate_kwargs.call(plot_o, plot_o.plot, [RS_desugar_kwargs({pos: RS_list_decorate([ current_time, 1.4["*"](GS_power(10, 9)) ])})]);
+          "199";
+          RS_interpolate_kwargs.call(plot_s, plot_s.plot, [RS_desugar_kwargs({pos: RS_list_decorate([ current_time, 2["*"](GS_power(10, 9)) ])})]);
+          "200";
+          e_plot.xmax = current_time;
+          "209";
+          if ((time_run === true || typeof time_run === "object" && RS_equals(time_run, true))) {
+              "210";
+              current_time=current_time["+"](addition_years);
+              "211";
+              current_time_text.text = "Lived: "["+"](str(current_time))["+"](" years (")["+"](str(addition_years["*"](60)))["+"](" years/sec)\n");
+              "212";
+              sun_lifetime_progress_bar.text = "<div class=\"w3-light-grey w3-tiny\" style=\"width:880px; border: 1px solid grey\"><div class=\"w3-container w3-green\" style=\"width:"["+"](str(current_time["/"](sun_lifetime)["*"](100)))["+"]("%\">")["+"](str(round(current_time["/"](sun_lifetime)["*"](100), 2)))["+"]("%</div></div>");
+              "213";
+              star_helium_burning.visible = true;
+              "214";
+              if (round(current_time["/"](sun_lifetime)["*"](100), 2)[">"](100)) {
+                  "215";
+                  sun_lifetime_text.text = "";
+                  "216";
+                  sun_lifetime_text_extended.text = "";
+                  "217";
+                  status = "Main sequence end, Hertzsprung gap";
+                  "218";
+                  status_text.text = "<b>Status: "["+"](status)["+"]("</b>\n");
+                  "220";
+                  free_fall_time_counter = 0;
+                  "221";
+                  if (sun_core_temp["+"](temp_change)["<"](GS_power(10, 8))) {
+                      "222";
+                      status = "Burning Hydrogen end. Helium white dwarf.";
+                      "223";
+                      status_text.text = "<b>Status: "["+"](status)["+"]("</b>\n");
+                      "224";
+                      sun_lifetime_progress_bar.text = false;
+                      "225";
+                      star_helium_burning.visible = false;
+                      "227";
+                      free_fall_time = GS_power((3["*"](pi)["/"](32["*"](G)["*"](new_sun_density))), (1["/"](2)))["/"](60)["/"](60)["/"](24)["/"](365);
+                      "228";
+                      free_fall_time_counter=free_fall_time_counter["+"](free_fall_time);
+                      "229";
+                      if (free_fall_time_counter[">"](addition_years)) {
+                          "230";
+                          free_fall_time_counter=free_fall_time_counter["-"](addition_years);
+                          "231";
+                      } else {
+                          "233";
+                          white_dwarf = true;
+                          "234";
+                          radius_wd = 4["*"](pi)["*"](K)["/"](G["*"](GS_power((4["/"](3)["*"](pi)), (5["/"](3))))["*"](GS_power(new_sun_mass, (1["/"](3)))));
+                          "235";
+                          print(radius_wd);
+                          "236";
+                          star.radius = radius_wd;
+                          "237";
+                      }
+                  } else if (GS_power(10, 8)["<"](RS_cond_temp = sun_core_temp["+"](temp_change)) && RS_cond_temp["<"](5["*"](GS_power(10, 8)))) {
+                      "238";
+                      sun_lifetime_progress_bar.text = false;
+                      "239";
+                      star_helium_burning.visible = false;
+                      "240";
+                      if (helium["<"](.01)) {
+                          "241";
+                          status = "Burning to Carbon complete.";
+                          "242";
+                          status_text.text = "<b>Status: "["+"](status)["+"]("</b>\n");
+                          "243";
+                      } else {
+                          "244";
+                          status = "Burning till C-O star (Triple Alpha Process)";
+                          "245";
+                          status_text.text = "<b>Status: "["+"](status)["+"]("</b>\n");
+                          "247";
+                          helium_loss = addition_years["*"](60)["*"](60)["*"](24)["*"](365)["*"](8.8)["*"](GS_power(10, 37))["*"](24["*"](helium_atom_mass)["/"](core_mass));
+                          "248";
+                          co_gain = addition_years["*"](60)["*"](60)["*"](24)["*"](365)["*"](8.8)["*"](GS_power(10, 37))["*"](1["*"](co_atom_mass)["/"](core_mass));
+                          "249";
+                          helium = helium["-"](helium_loss);
+                          "250";
+                          co = co["+"](co_gain);
+                          "251";
+                          information_text_composition_dict.text = "\nElements: H("["+"](str(round(hydrogen, 3)))["+"]("), He(")["+"](str(round(helium, 3)))["+"]("), C(")["+"](str(co))["+"](")");
+                          "253";
+                          per_reaction_energy_co = 1.3273["*"](GS_power(10, 23["-u"]()))["+"](2.15891["*"](GS_power(10, 26["-u"]())))["+"](1.602["*"](GS_power(10, 19["-u"]()))["*"](2e5));
+                          "254";
+                          reaction_per_sec_co = new_sun_lightforce["/"](per_reaction_energy_co);
+                          "256";
+                          sun_core_mass = core_mass;
+                          "257";
+                          information_text_sun_core_mass.text = "Core Mass: "["+"](str(new_sun_mass["/"](10)))["+"](" kg");
+                          "258";
+                          kg_per_reaction_co = 6.692["*"](GS_power(10, 27["-u"]()));
+                          "259";
+                          possible_reactions_co = sun_core_mass["/"](kg_per_reaction_co);
+                          "261";
+                          lifetime_co = possible_reactions_co["/"](reaction_per_sec_co);
+                          "262";
+                          sun_lifetime_co = lifetime_co["/"](pi["*"](GS_power(10, 7)));
+                          "263";
+                          sun_lifetime_text.text = "Total Lifetime (C-O white dwarf): "["+"](str(round(sun_lifetime_co, 2)))["+"](" years");
+                          "264";
+                          sun_lifetime_text_extended.text = " ≈ 10^"["+"](str(len(str(round(sun_lifetime_co)))))["+"](" years");
+                          "265";
+                      }
+                  } else if (5["*"](GS_power(10, 8))["<"](RS_cond_temp = sun_core_temp["+"](temp_change)) && RS_cond_temp["<"](1.4["*"](GS_power(10, 9)))) {
+                      "266";
+                      status = "Burning Carbon.";
+                      "267";
+                      status_text.text = "<b>Status: "["+"](status)["+"]("</b>\n");
+                      "268";
+                  } else if (1.4["*"](GS_power(10, 9))["<"](RS_cond_temp = sun_core_temp["+"](temp_change)) && RS_cond_temp["<"](2["*"](GS_power(10, 9)))) {
+                      "269";
+                      status = "Burning Oxygen.";
+                      "270";
+                      status_text.text = "<b>Status: "["+"](status)["+"]("</b>\n");
+                      "271";
+                  } else if (2["*"](GS_power(10, 9))["<"](RS_cond_temp = sun_core_temp["+"](temp_change)) && RS_cond_temp["<"](5["*"](GS_power(10, 8)))) {
+                      "272";
+                      status = "Burning Silicon.";
+                      "273";
+                      status_text.text = "<b>Status: "["+"](status)["+"]("</b>\n");
+                      "274";
+                  } else {
+                      "275";
+                      status = "Burning till Fe core star, then black hole or neutron star.";
+                      "276";
+                      status_text.text = "<b>Status: "["+"](status)["+"]("</b>\n");
+                      "277";
+                  }
+              } else {
+                  "278";
+                  hydrogen_loss = addition_years["*"](60)["*"](60)["*"](24)["*"](365)["*"](8.8)["*"](GS_power(10, 37))["*"](4["*"](hydrogen_atom_mass)["/"](core_mass));
+                  "279";
+                  helium_gain = addition_years["*"](60)["*"](60)["*"](24)["*"](365)["*"](8.8)["*"](GS_power(10, 37))["*"](1["*"](helium_atom_mass)["/"](core_mass));
+                  "280";
+                  hydrogen = hydrogen["-"](hydrogen_loss);
+                  "281";
+                  helium = helium["+"](hydrogen_loss);
+                  "282";
+                  information_text_composition_dict.text = "Elements: H("["+"](str(hydrogen))["+"]("), He(")["+"](str(helium))["+"]("), C(")["+"](str(co))["+"](")");
+                  "283";
+                  sun_lifetime_text.text = "Total Lifetime (Main Sequence): "["+"](str(round(sun_lifetime, 2)))["+"](" years");
+                  "284";
+                  sun_lifetime_text_extended.text = " ≈ 10^"["+"](str(len(str(round(sun_lifetime)))))["+"](" years");
+              }
+              "286";
+              new_sun_mass=new_sun_mass["-"](sun_mass_loss_per_year["*"](addition_years));
+              "287";
+              new_sun_density = new_sun_mass["/"](sun_volume);
+              "289";
+              sun_core_temp = G["*"](new_sun_mass)["*"](average_atom_mass_core)["/"](new_sun_radius["*"](3["/"](2))["*"](k));
+              "290";
+              average_atom_mass_core = helium["*"](100)["*"](helium_atom_mass)["+"](hydrogen["*"](100)["*"](hydrogen_atom_mass))["+"](co["*"](100)["*"](co_atom_mass))["/"](100);
+              "291";
+              temp_change = 3["/"](10)["*"](G)["*"](GS_power(new_sun_mass, 2)["/"](new_sun_radius))["/"](new_sun_mass["*"](average_heat_capacity_core));
+              "292";
+              core_mass = new_sun_mass["*"](.1);
+          }
+          "295";
+          pressure_eq = (await P(new_sun_radius["+"](new_sun_radius["/"](2)["/"](2))))["-"]((await P(new_sun_radius["-"](new_sun_radius["/"](2)["/"](2)))))["/"](new_sun_radius["/"](2));
+          "296";
+          gravity_eq = 2["*"](G["*"]((await M(new_sun_radius["/"](2))))["*"](new_sun_density)["/"](GS_power((new_sun_radius["/"](2)), 2))["-u"]());
+          "297";
+          if (RS_equals(round(pressure_eq), round(gravity_eq))) {
+              "298";
+              status_eq = "Pressure and gravity are in check.";
+              "299";
+              status_eq_text.text = "<b style=\"color: green;\">Hydrostatic Equilibrium Status: "["+"](status_eq)["+"]("</b>(")["+"](str(round(pressure_eq)))["+"]("=")["+"](str(round(gravity_eq)))["+"](")\n");
+              "300";
+          } else {
+              "301";
+              status_eq = "Pressure and gravity are NOT in check.";
+              "302";
+              status_eq_text.text = "<b style=\"color: red;\">Hydrostatic Equilibrium Status: "["+"](status_eq)["+"]("</b>(")["+"](str(round(pressure_eq)))["+"]("=")["+"](str(round(gravity_eq)))["+"](")\n");
+              "304";
+          }
+          if ((white_dwarf === false || typeof white_dwarf === "object" && RS_equals(white_dwarf, false))) {
+              "305";
+              star.radius = new_sun_radius;
+          }
+          "306";
+          star.mass = new_sun_mass;
+          "308";
+          information_text_sun_core_temp.text = "\nCore Temperature: "["+"](str(sun_core_temp))["+"](" K");
+          "309";
+          information_text_sun_core_pressure.text = "\nCore Pressure: "["+"](str((await P(0))))["+"](" Pa<br>");
+          "310";
+          information_text_mass.text = "\nMass: "["+"](str(new_sun_mass))["+"](" kg (")["+"](str(round(new_sun_mass["/"](sun_mass), 3)))["+"](" *sun_mass)<br>");
+          "311";
+          information_text_radius.text = "\nRadius: "["+"](str(new_sun_radius))["+"](" m<br>");
+          "312";
+          t = G["*"](sun_mass)["*"](2)["*"](GS_power(10, 30))["-u"]()["/"](GS_power(sun_radius, 2));
+      }
+  };
+
+  ;$(function(){ window.__context = { glowscript_container: $("#glowscript").removeAttr("id") }; __main__() })})()
+  // END JAVASCRIPT
+
+  //--><!]]></script>
+  </div>
+</body>
+</html>
